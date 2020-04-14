@@ -13,6 +13,7 @@ Os clientes poden ser APPs Android, ou webapps multiplataforma feitas con Electr
 
 Está orientado específicamente a **pequenos talleres** de reparación de informática e telefonía, pero a idea é facelo o suficientemente flexible como para que poida ser utilizado por outros sectores, como automovilístico, electrodomésticos, etc...
 
+
 ## Necesidades e alternativas
 
 Por experiencia propia no sector, a maioría de tendas e talleres son bastante caóticos e é habitual perder de vista algunha peza ou atopalas polo almacen e non saber para qué se pediron. 
@@ -20,6 +21,7 @@ Por experiencia propia no sector, a maioría de tendas e talleres son bastante c
 A maioría do software actual é demasiado complexo ou caro para as pequenas e medianas empresas.
 
 O que diferencia éste proxecto é a especialización. Garda o estrictamente necesario para coñecer os clientes e que necesitan.
+
 
 ## Comercialización
 
