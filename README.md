@@ -1,4 +1,4 @@
-# Proyecto fin de ciclo
+# XSR - Xestor Simple de Reparacións
 
 > *TODO*: Este documento será la "*página de aterrizaje*" de tu proyecto. Será lo primero que vean los que se interesen por él. Cúida su redacción con todo tu mimo. Elimina posteriormente todas las lineas "*TODO*" cuando creas finalizada su redacción.
 > Puedes acompañar a la redacción de este fichero con imágenes o gifs, pero no abuses de ellos.
@@ -6,6 +6,8 @@
 ## Descripción
 
 > *TODO*: Realiza una breve descripción del proyecto. No menos de 100 palabras y no más de 300. Resalta lo fundamental **con tus propias palabras**. Utiliza un lenguaje correcto, **pero natural**, que lo entienda todo el mundo, incluso y en especial, las personas que no tengan un conocimiento técnico avanzado. Puede ser un estracto o resumen de apartados que ya contemples en otros ficheros.
+
+XSR é un software, orientado a pequenos talleres de reparación, que axuda a manter certo control sobre a organización do inventario, reparacións para clientes e pezas.
 
 ## Instalación / Puesta en marcha
 
@@ -33,7 +35,7 @@
 
 1. [Idea](doc/1_idea.md)
 2. [Necesidades](doc/2_necesidades.md)
-3. [Análisis](doc/templates/3_analise.md)
+3. [Análise](doc/3_analise.md)
 4. [Diseño](doc/templates/4_deseño.md)
 5. [Planificación](doc/templates/5_planificacion.md)
 6. [Implantación](doc/templates/6_implantacion.md)
