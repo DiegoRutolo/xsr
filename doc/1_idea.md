@@ -2,11 +2,13 @@
 
 ## O proxecto
 
-O proxecto consiste nun sistema de xestión para un taller. Sirve para gardar un rexistro dos clientes, as pezas que piden e os servizos prestados.
+O proxecto consiste nun sistema de xestión para un taller. Serve para gardar un rexistro dos clientes, as pezas que piden e os servizos prestados.
 
 A aplicación utiliza a arquitectura Servidor-Cliente. O servidor é unha aplicación en java dentro dun contenedor (probablemente Docker) e unha API REST para comunicarse cos clientes.
 
 Os clientes poden ser APPs Android, ou webapps multiplataforma feitas con Electron. O importante é que só interactúan con servidor mediate a API, de forma que é moi facil programarlas de forma independiente.
+
+O proxecto céntrase na documentación do servidor e definir os protocolos de comunicación.
 
 
 ## Destinatarios

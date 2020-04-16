@@ -9,6 +9,10 @@
 
 XSR é un software, orientado a pequenos talleres de reparación, que axuda a manter certo control sobre a organización do inventario, reparacións para clientes e pezas.
 
+A aplicación completa está formada por un servidor e múltiples clientes.
+
+Este repositorio contén a documentación do servidor e as especificacións da comunicación. Cada cliente que se desenvolva terá un repositorio propio.
+
 ## Instalación / Puesta en marcha
 
 > *TODO*: En este apartado describe con toda precisión y a poder ser con la mayor simplicidad/facilidad posible, cómo poner en marcha tu aplicación para probarla (en un ambiente local). Se valorará muy positivamente que este proceso sea lo más fácil posible, con una simple instrucción (p. e. un script de instalación).
