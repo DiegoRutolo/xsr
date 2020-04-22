@@ -22,7 +22,7 @@ Estas son as operacións que poden realizar os usuarios dende o cliente.
  * Rexistrar, editar e eliminar **clientes**:
 	* nome, tlf, email, notas
  * Rexistrar, editar e eliminar **pezas**:
-	* Codigo, proveedor, nome, foto, numero, notas
+	* Codigo, proveedor, nome, foto, numero, precio, notas
  * Rexistrar, editar e eliminar **reparacións**:
 	* Data ini, data fin, horas, completada(VF), causa, solución, cliente, pezas, notas
  * Asociar **pedidos** de clientes e pezas

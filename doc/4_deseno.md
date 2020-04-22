@@ -180,6 +180,89 @@ Accept: application/json
 
 ### Respostas
 
+O servidor responde co código HTTP adecuado para cada situación, ademais dos estándar:
+
+ * 200: OK, usado cando o cliente solidita datos
+ * 201: Cando se efectúa un cambio CUD
+ * 400: Error de sintaxe na petición
+ * 401: O corpo non está cifrado cunha clave coñecida
+ * 403: O cliente non ten permiso para esta operación
+
+
+
+Exemplo de resposta de creacón correcta
+```
+HTTP/1.1 201 Created
+Server: xsrd
+Content-Type: application/json
+Content-Length: 0
+```
+
+
+Exemplo de petición e resposta de consulta de datos
+```
+GET / HTTP/1.1
+HOST: servidor
+Content-Type: applicaiton/json
+Accept: application/json
+
+{
+	"usuario": {
+		"rol": "currante"
+	},
+	"operacion": {
+		"apartado": "x_pezas",
+		"tipo": "get",
+		"selec": {}
+	}
+}
+
+
+
+
+
+
+
+
+HTTP/1.1 200 OK
+Server: servidor
+Content-Type: application/json
+Content-Length: 886
+
+{[
+	{
+		"id": 0,
+		"codigo": "1586",
+		"proveedor": "Impextrom",
+		"nome": "Batería DJI Phantom 3",
+		"img": "<IMAXE_CODIFICADA_EN_BASE64>",
+		"precio": 47.85,
+		"cantidade": 2,
+		"notas": "https://www.impextrom.com/es/bateria-para-control-remoto-dji-phantom-3-advance-phantom-4-pro-phantom-4-p1000010012"
+	},
+	{
+		"id": 1,
+		"codigo": "ERT567",
+		"proveedor": "Impextrom",
+		"nome": "Lente de cámara negra para iPhone 7 Plus",
+		"img": "<IMAXE_CODIFICADA_EN_BASE64>",
+		"precio": 1.83,
+		"cantidade": 7,
+		"notas": "https://www.impextrom.com/es/lente-de-camara-negra-para-iphone-7-plus-p1000010344"
+	},
+	{
+		"id": 2,
+		"codigo": "789557654",
+		"proveedor": "PCcomponentes",
+		"nome": "MSI B365M PRO-VDH",
+		"img": "<IMAXE_CODIFICADA_EN_BASE64>",
+		"precio": 73.99,
+		"cantidade": 1,
+		"notas": "https://www.pccomponentes.com/msi-b365m-pro-vdh recomendable para usuario medio"
+	},
+]}
+```
+
 ## Deseño de interface de usuarios [mockups ou diagramas...].
 
 ## Diagrama de Base de Datos.
