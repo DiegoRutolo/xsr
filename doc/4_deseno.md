@@ -2,6 +2,8 @@
 
 ## Modelo conceptual do dominio da aplicación e/ou Diagrama de clases [usando UML, ConML, ou linguaxe semellante].
 
+![UML](img/UML.png)
+
 ## Casos de uso [descritos en fichas e/ou mediante esquemas; deben incluír o(s) tipo(s) de usuario implicados en cada caso de uso].
 
 ![Operacións do xerente](img/CasoDeUso1.png "Caso de uso 1")
@@ -10,19 +12,24 @@
 
 ## Mensaxes
 
+Este aparatado explica a estructura dos mensaxes intercambiados entres os clientes e o servidor.
+
+> Un detalle importante é que as imaxes están sempre codificadas en **base64** para que poidan ser incluidas no JSON. Serán os clientes os encargados de codificar e descodificalas.
+
 ### Peticións
 
 O corpo das peticións (o JSON) envíase encriptado cunha clave privada que identifica o cliente.
 O servidor utiliza a clave pública para descifralo e identificar o cliente autorizado.
 
-O copro das peticións ten sempre esta estructura:
+O corpo das peticións ten sempre esta estructura:
 
 > Os `[]` indican datos opcionais
 
+
 ```
 {
-	"usuairo": {
-
+	"usuario": {
+		"rol": <ROL>
 	},
 	"operacion": {
 		"apartado": <APARTADO>,
@@ -33,11 +40,10 @@ O copro das peticións ten sempre esta estructura:
 }
 ```
 
-
 Exemplo de petición para consultar crear, editar e eliminar un cliente
 ```
 GET / HTTP/1.1
-HOST: servidor
+HOST: servidor:10097
 Content-Type: applicaiton/json
 Accept: application/json
 
@@ -55,7 +61,7 @@ Accept: application/json
 
 ```
 POST / HTTP/1.1
-HOST: servidor
+HOST: servidor:10097
 Content-Type: applicaiton/json
 Accept: application/json
 
@@ -80,7 +86,7 @@ Accept: application/json
 
 ```
 PUT / HTTP/1.1
-HOST: servidor
+HOST: servidor:10097
 Content-Type: applicaiton/json
 Accept: application/json
 
@@ -106,7 +112,7 @@ Accept: application/json
 
 ```
 DELETE / HTTP/1.1
-HOST: servidor
+HOST: servidor:10097
 Content-Type: applicaiton/json
 Accept: application/json
 
@@ -129,7 +135,7 @@ Para operar con pezas ou reparacións sería igual pero cambiando *x_clientes* p
 Exemplo de peticións para crear ou eliminar pedidos
 ```
 POST / HTTP/1.1
-HOST: servidor
+HOST: servidor:10097
 Content-Type: applicaiton/json
 Accept: application/json
 
@@ -154,7 +160,7 @@ Accept: application/json
 
 ```
 DELETE / HTTP/1.1
-HOST: servidor
+HOST: servidor:10097
 Content-Type: applicaiton/json
 Accept: application/json
 
@@ -186,14 +192,14 @@ O servidor responde co código HTTP adecuado para cada situación, ademais dos e
  * 201: Cando se efectúa un cambio CUD
  * 400: Error de sintaxe na petición
  * 401: O corpo non está cifrado cunha clave coñecida
- * 403: O cliente non ten permiso para esta operación
+ * 403: O cliente ou usuario non ten permiso para esta operación
 
 
 
 Exemplo de resposta de creacón correcta
 ```
 HTTP/1.1 201 Created
-Server: xsrd
+Server: xsrd/1.0
 Content-Type: application/json
 Content-Length: 0
 ```
@@ -202,7 +208,7 @@ Content-Length: 0
 Exemplo de petición e resposta de consulta de datos
 ```
 GET / HTTP/1.1
-HOST: servidor
+HOST: servidor:10097
 Content-Type: applicaiton/json
 Accept: application/json
 
@@ -225,7 +231,7 @@ Accept: application/json
 
 
 HTTP/1.1 200 OK
-Server: servidor
+Server: xsrd/1.0
 Content-Type: application/json
 Content-Length: 886
 
@@ -264,6 +270,8 @@ Content-Length: 886
 ```
 
 ## Deseño de interface de usuarios [mockups ou diagramas...].
+
+O servidor non conta con interface de usuario, esa función delégase nos clientes.
 
 ## Diagrama de Base de Datos.
 
