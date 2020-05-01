@@ -1,11 +1,6 @@
 # XSR - Xestor Simple de Reparacións
 
-> *TODO*: Este documento será la "*página de aterrizaje*" de tu proyecto. Será lo primero que vean los que se interesen por él. Cúida su redacción con todo tu mimo. Elimina posteriormente todas las lineas "*TODO*" cuando creas finalizada su redacción.
-> Puedes acompañar a la redacción de este fichero con imágenes o gifs, pero no abuses de ellos.
-
 ## Descripción
-
-> *TODO*: Realiza una breve descripción del proyecto. No menos de 100 palabras y no más de 300. Resalta lo fundamental **con tus propias palabras**. Utiliza un lenguaje correcto, **pero natural**, que lo entienda todo el mundo, incluso y en especial, las personas que no tengan un conocimiento técnico avanzado. Puede ser un estracto o resumen de apartados que ya contemples en otros ficheros.
 
 XSR é un software, orientado a pequenos talleres de reparación, que axuda a manter certo control sobre a organización do inventario, reparacións para clientes e pezas.
 
@@ -13,24 +8,73 @@ A aplicación completa está formada por un servidor e múltiples clientes.
 
 Este repositorio contén a documentación do servidor e as especificacións da comunicación. Cada cliente que se desenvolva terá un repositorio propio.
 
-## Instalación / Puesta en marcha
+## Instalación / Posta en marcha
 
-> *TODO*: En este apartado describe con toda precisión y a poder ser con la mayor simplicidad/facilidad posible, cómo poner en marcha tu aplicación para probarla (en un ambiente local). Se valorará muy positivamente que este proceso sea lo más fácil posible, con una simple instrucción (p. e. un script de instalación).
-> Si tu proyecto es documental, realiza una especificación de cómo va a ser este proceso. En otras palabras, realiza este apartado independientemente que no haya implementación.
+XSR é unha aplicación basada en [Docker](https://www.docker.com/), polo que a instalación é bastante sinxela.
+
+Proporcionase un script que utiliza [Maven](https://maven.apache.org/) para compilar, executar os tests e empaquetar. A continuación lanza 2 contenedores (base de datos e servidor) e conecta a rede e os arquivos de configuración. 
+
+Pero non necesitas saber todo esto para instalala.
+
+Para cambiar os valores por defecto podes editar o arquivo `build.sh` e `config/xsrd.conf`. Asegúrate de que teñan o mesmo valor en ambolos dous.
+
+> CAMBIA O CONTRASINAL POR DEFECTO
+
+### Linux
+
+Para instalar XSR nun sistema Linux podes usar o script `build.sh`:
+
+
+ ```
+ git clone https://gitlab.iessanclemente.net/damo/a16diegoar.git
+ cd a16diegoar
+ chmod +x build.sh cleanup.sh && ./build.sh
+ ```
+
+ Podes usar o script `cleanup.sh` para eliminar todo rastro da aplicación: rede, contenedores e config.
+
+### Outros
+
+Podes ver o script de instalación `build.sh` e adaptar os comandos en orden para o teu sistema.
+
+Por exemplo, para Windows, o último comando que lanza o contenedor do servidor podería ser algo así:
+```
+docker run -d -p 10097:10097 --network $NETNAME --network-alias xsr-srv -v config\xsrd.conf:%APPDATA%\Local\xsrd.conf --name xsr-srv xsr
+```
+
 
 ## Uso
 
-> *TODO*: Es este apartado describe brevemente cómo se usará el software que proyectas. Si tiene una interfaz de terminal, describe aquí su sintaxis. Si tiene una interfaz gráfica de usuario, describe aquí **sólo el uso** (a modo de sumario) **de los aspectos más relevantes de su funcionamiento** (máxima brevedad, como si fuese un anuncio reclamo o comercial).
-> Si tu proyecto es documental, realiza una especificación de cómo planteas estas interfaces, con ejemplos incluso o esquemas de diseño. En otras palabras, realiza este apartado independientemente que no haya implementación.
+Sendo unha aplicación docker toda a interación será a través desta ferramenta.
 
-## Sobre el autor
+A continuación detallanse os comandos mais interesantes:
+```
+docker logs xsr-srv					# Consultar os logs
 
-> *TODO*: Realiza una breve descripción de quien eres (perfil profesional), tus puntos fuertes, o tecnologías que más dominas... y porqué te has decantado por este proyecto. **No más de 200 palabras**. Indica la forma fiable de contactar contigo en el presente y en el futuro.
+docker stop xsr-srv xsr-mysql		# Parar os contenedores
+docker start xsr-mysql xsr-srv		# Iniciar
+```
+
+### Configuración
+
+A configuración do servidor realízase a través dun arquivo chamado `xsrd.conf`. Por defecto localízase en `~/.config/xsrd.conf`, pero pódese cambiar modificando `build.sh` antes de executalo.
+
+
+## Sobre o autor
+
+Eu son Diego Antelo Rútolo e son Técnico en Sistemas Microinformáticos e Redes e Técnico superior en Desenvolvemento de Aplicacións Multiplataforma.
+
+Podes revisar os meus proxectos na web [rutolo.eu](http://rutolo.eu) ou en [GitHub](https://github.com/DiegoRutolo)
+
+Para contacto: diegorutolo{arroba}gmail{punto}com
+
 
 ## Licencia
 
-> *TODO*: Es requisito INDISPENSABLE el licenciar explícitamente el proyecto software. Se recomienda licenciar con *GNU Free Documentation License Version 1.3*. Crear un fichero `LICENSE` en la raiz del repo, con tu fichero de licencia. Recuerda que si empleas una licencia de software libre estás autorizando la derivación de tu obra bajo la misma licencia que elijas, pudiendo dar continuidad, p. e. otro alumno, para continuar tu proyecto en otro curso.
-> Si tu proyecto es documental, recomendamos los términos de *GNU Free Documentation License Version 1.3*, crea igualmente el fichero `LICENSE`. Será especialmente valorado en este caso, la claridad de la especificación para que el proyecto pueda ser ejecutado partiendo de lo proyectado.
+Este proxecto utiliza unha licencia **GPL-3** (GNU General Public License v3).
+
+Podes atopar o texto completo no arquivo [LICENSE](./LICENSE).
+Tamén hai traduccións [*non oficiais*](https://www.gnu.org/licenses/translations.html) e un [resumo](https://tldrlegal.com/license/gnu-general-public-license-v3-(gpl-3)).
 
 
 ## Índice
@@ -40,8 +84,8 @@ Este repositorio contén a documentación do servidor e as especificacións da c
 1. [Idea](doc/1_idea.md)
 2. [Necesidades](doc/2_necesidades.md)
 3. [Análise](doc/3_analise.md)
-4. [Diseño](doc/templates/4_deseño.md)
-5. [Planificación](doc/templates/5_planificacion.md)
+4. [Diseño](doc/4_deseño.md)
+5. [Planificación](doc/5_planificacion.md)
 6. [Implantación](doc/templates/6_implantacion.md)
 
 
