@@ -2,10 +2,14 @@ package eu.rutolo.xsr.db;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.SQLException;
+
+import eu.rutolo.xsr.Main;
+import eu.rutolo.xsr.data.Log;
 
 public class Operacions {
 
-	Connection con;
+	private Connection con;
 
 	public Operacions() {
 		try {
@@ -15,6 +19,14 @@ public class Operacions {
 			e.printStackTrace();
 		}
 
-		con = DriverManager.getConnection(url, user, password)
+		String url = "jdbc:mysql://" + Main.conf.getDBHost() + ":" + Main.conf.getDBPort() + "/"
+				+ Main.conf.getDBName();
+		try {
+			con = DriverManager.getConnection(url, Main.conf.getDBUser(), Main.conf.getDBPasswd());
+		} catch (SQLException e) {
+			e.printStackTrace();
+			Log.e("Error SQL: " + e.getMessage());
+			System.exit(2);
+		}
 	}
 }

@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import eu.rutolo.xsr.data.Config;
+
 /**
  * Hello world!
  *
@@ -11,11 +13,13 @@ import java.net.Socket;
 public class Main {
 
 	public static final int PORT = 10097;
+	public static Config conf;
 
 	public static void main(String[] args) {
 
-		ServerSocket ss;
+		conf = new Config();
 
+		ServerSocket ss;
 		try {
 			ss = new ServerSocket(PORT);
 			while (true) {
