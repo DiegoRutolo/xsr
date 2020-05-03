@@ -1,20 +1,20 @@
 # FASE DE PLANIFICACIÓN DO PROXECTO
 
-## Guía de planificación do proxecto
+# Guía de planificación do proxecto
 
-### Metodoloxía prevista
+## Metodoloxía prevista
 
 
-### Fases planificadas
+## Fases planificadas
 
 Descríbense as fases en que se divide o proxecto.
 Pódense indicar os recursos materiais e humanos asociados a cada tarefa ou, se son os mesmos, de maneira máis xeral.
 
 > **Recursos**: Os recursos son exactamente os mesmos para todas as fases: 1 programador (eu), 1 PC (Ubuntu) e unha conexión a internet.
 
-#### Fase 1: Estudo de necesidades e modelo de negocio
+### Fase 1: Estudo de necesidades e modelo de negocio
 
-##### Tarefa 1: xxxxxxxx
+#### Tarefa 1: xxxxxxxx
 
 Descrición: 
 
@@ -24,140 +24,90 @@ Recursos humanos: Persoas que se encargarán de realizar esta tarefa
 
 Duración: 
 
-##### Tarefa 2
+#### Tarefa 2
 ...
 
 -------------------------------
 
-#### Fase 2: Base de Datos
+### Fase 2: Proba de concepto
 
-##### Tarefa 1: Docker
+**Duración da fase**: 5 días
 
-Descrición: Configurar o contenedor de MariaDB.
+**Descrición**: Nesta fase realízase unha implementación sen funcionalidade real, pero que demostra que todas as tarefas son posibles (configuracion de contenedores, probas de conectividade, etc...).
 
-Duración: 1 día
+**Obxetivo**: O servidor debería ser capaz de recibir peticións HTTP, ler o arquivo de configuración e conectarse coa base de datos.
 
-##### Tarefa 2: Clases
+#### Tarefa 1: Docker e build scripts
 
-Descrición: Escribir as clases que corresponden ás entidades da DB.
+**Descrición**: Escribir os scripts *(Docker, Bash, SQL...)* que crean e configuran as imaxes.
 
-Duración: 1/2 día
+#### Tarefa 2: Clases principais
 
-##### Tarefa 3: Operacións
+**Descricion**: Escribir a funcadión das principais clases que forman o código. 
+Algunhas destas clases son:
+ * Main
+ * Servidor
+ * db.Operacions
+ * data.Config
+ * data.Log
 
-Descrición: Escribir a clase de Operacións
+-------------------------------------
 
-Duración: 1 día
+### Fase 3: Xestión de Clientes
 
-##### Tarefa 4: Probas
+**Duración**: 4 días
 
-Descrición: Comprobar que o anterior funciona correctamente en conxunto
+**Descrición**: Nesta fase impleméntase a xestión de *Clientes*.
 
-Duración: 1/2 día
+**Obxetivo**: Poder crear, consultar e actualizar clientes. Interactuar co cliente mediante JSON.
 
-#### Fase 3: Servidor
+#### Tarefa 1: Clases
 
-##### Tarefa 1: Traductor
+**Descrición**: Crear a Clase *Cliente* e os métodos de *Operacións*
 
-Descrición: Escribir as clases auxiliares necesarias para manexar os datos
+#### Tarefa 2: Respostas
 
-Duración: 1 día
+**Descrición**: Métodos no servidor para interpretar as peticións entrantes, compoñer a resposta adecuada e enviala.
 
-##### Tarefa 2: Servidor
+----------------
 
-Descrición: Escribir o fío do servidor
+### Fase 4: Pezas
 
-Duración: 3 días
+**Duración**: 2 días
 
-#### Fase 4: Main
+**Descrición**: Implementar xestión de *Pezas* de forma parecida á fase 3.
 
-##### Tarefa 1: Config
-
-Descrición: Implementar todos os sistemas que permiten ler a configuración. Esto inclúe o código java e os *shares* de docker
-
-Duración: 2 días
-
-##### Tarefa 2: Combinar
-
-Descrición: Comprobar que todos os compoñentes combinados funcionan como deben
-
-Duración: 1 día
-
-#### Fase 5: Imprevistos
-
-Descrición: Plazo para resolver os problemas que vaian aparecendo, que seguro que non son pucos.
-
-Duración: 5 días
+**Obxetivo**: Poder crear, consultar e actualizar pezas. Interactuar co cliente mediante JSON.
 
 ---------------------------------------
 
-### Diagrama de Gantt
-Pódese usar o software "Gantt project" ou outro para representar nun cronograma a información relativa á planificación de tarefas.
+## Diagrama de Gantt
 
-## Orzamento
-Realizar o orzamento do proxecto é relativamente fácil se se elaboraron ben as etapas anteriores; é dicir, definir as actividades necesarias e os recursos propios de cada actividade. 
-Neste caso dispoñerase dun custo por cada actividade e a suma do custo de todas as actividades será o custo total do proxecto. 
-Para establecer os custos do proxecto téñense en conta diferentes conceptos: 
-Materiais que se utilizan: material funxible, materias primas, materiais didácticos, roupa de traballo… 
-Custo horario das persoas que participan directamente na actividade. 
-Aluguer/compra de ferramentas, maquinaria, equipos informáticos e/ou audiovisuais… 
-Aluguer/compra de locais 
-Contratos de subministracións: auga, luz, electricidade, gas… Subcontrataciones 
-Gastos de publicidade… 
-Seguros ... 
+![Diagrama de Gantt](img/xsr_Gantt.png)
 
-O maior custo no proxecto case sempre corresponde ás persoas, polo que é importante controlar o número de horas que se invisten en cada actividade para que non se nos desequilibre o orzamento. Tamén hai que coidar as subcontratacións; convén que traballen cun orzamento establecido.
- A continuación preséntanse dúas opción de táboa para facilitar a creación do orzamento do proxecto:
+# Orzamento
 
-### Orzamento por actividade
+O precio por día por traballador corresponde a 90€.
+Considérase un día de traballo como 8h. O precio por hora por persoa é de 11,25€, calculado a partir das taboas salariais do [Convenio de consultoría](https://www.boe.es/eli/es/res/2018/02/22/(3)/dof/spa/pdf).
 
-| ACTIVIDADE | DURACIÓN | CUSTO (EUROS) | | CUSTO TOTAL ACTIVIDADE |
-|--|--|--|--|--|
-|            |          | PERSOAS|RECURSOS MATERIAIS|
-|||||
-|||||
-|||||
-|||||
+O consumo do equipo calcúlase utilizando a potencia da fonte de alimentación (600W) e o precio da corrente eléctrica a 0,07419 €/kWh.
 
-| TOTAL | PROXECTO | 
-| -- | -- |
+Con estes cálculos saen 4.8 kWh/día -> 0,356112 €/día
 
-### Orzamento por partidas de inversión / gasto:
+> O consumo total por día é de **90.36 €**.
 
-| CONCEPTO | IMPORTE|
-|--|--|
-|**A) INVERSIONS**
-|Gastos de establecemento e gastos de constitución
-|Total inmobilizacións inmateriais
-|Terreos
-|Construcións
-|Instalacións técnicas
-|Maquinaria
-|Ferramentas
-|Mobiliario e instalacións
-|Equipos informáticos
-|Elementos de transporte
-|Outro inmobilizado material
-|Total inmobilizacións materiais
-|Outros gastos a distribuír en varios exercicios
-|**TOTAL INVERSIÓNS:**
-|**B) GASTOS**
-|Compras de materiais
-|Arrendamentos
-|Publicidade, propaganda e relacións públicas
-|Persoal
-|Reparacións e conservación
-|Servizos de profesionais independentes
-|Outros gastos xerais
-|Gastos financeiros
-|Amortizacións
-|Gastos de xestión e administración
-|**TOTAL GASTOS:**
 
-|TOTAL ORZAMENTO:
-|--|
+## Orzamento por actividade
 
-### WEBGRAFÍA
+| ACTIVIDADE	| DURACIÓN	| CUSTO (€)	|
+| :--:			| --		| --:		|
+| Fase 2		| 5 días	| 451.75	|
+| Fase 3		| 4 dáis	| 361.44	|
+| Fase 4		| 2 días	| 180.72	|
+|				|			|			|
+|				| TOTAL		| 993.91	|
+
+## WEBGRAFÍA
 Guía para a elaboración de proyectos. Gobierno Vasco.
 https://www.pluralismoyconvivencia.es/upload/19/71/guia_elaboracion_proyectos_c.pdf  (páxina 49 e seguintes)
 
