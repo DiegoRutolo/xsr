@@ -31,13 +31,23 @@ docker run -d \
 	-v xsr-mysql-data:/var/lib/mysql \
 	-e MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD \
 	-e MYSQL_DATABASE=$MYSQL_DATABASE \
+	-p 3306:3306 \
 	--name xsr-mysql \
 	mysql:5.7 && \
 echo "Lanzado contenedor MySQL"
 
 # Crear la base de datos
 docker cp config/xsrdb.sql xsr-mysql:/tmp/xsrdb.sql
-docker exec xsr-mysql /bin/bash -c "mysql -u root -p$MYSQL_ROOT_PASSWORD < /tmp/xsrdb.sql" && echo "DB creada"
+echo "Creando base de datos..."
+sleep 10
+if docker exec xsr-mysql /bin/bash -c "mysql -u root -p$MYSQL_ROOT_PASSWORD < /tmp/xsrdb.sql" 2> /dev/null; then
+	echo "DB creada"
+else
+	sleep 10
+	docker exec xsr-mysql /bin/bash -c "mysql -u root -p$MYSQL_ROOT_PASSWORD < /tmp/xsrdb.sql" && echo "DB creada"
+	#echo "Erro al crear DB. Puedes crearla manualmente con el comando 'docker exec xsr-mysql /bin/bash -c \"mysql -u root -pLA_CONTRASEÑA < /tmp/xsrdb.sql'"
+fi
+
 
 # Lanzar el contenedor de XSR
 docker run -d -p 10097:10097 \
