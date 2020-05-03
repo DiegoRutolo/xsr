@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+
 # Ruta absoluta del HOST donde se copia el archivo de configuración
 CONFIG_FILE=$HOME/.config/xsrd.conf
 # Contraseña de root del contenedor MySQL
@@ -12,20 +13,16 @@ NETNAME=xsr-net
 
 
 # Copiar el conf
-cp config/xsrd.conf $CONFIG_FILE
+cp config/xsrd.conf $CONFIG_FILE && \
 echo "Copiado archivo de configuración a $CONFIG_FILE"
 
 # Compilar la imagen
-docker build -t xsr:latest .
+docker build -t xsr:latest . && \
 echo "Compilada imagen de XSR"
 
-# Crear la red si no existe
-if docker network ls | grep $NETNAME; then
-	echo "La red $NETNAME ya existe"
-else
-	docker network create $NETNAME
-	echo "Creada la red $NETNAME"
-fi
+# Crear la red
+docker network create $NETNAME && \
+echo "Creada la red $NETNAME"
 
 # Lanzar el contenedor de mysql
 docker run -d \
@@ -35,8 +32,12 @@ docker run -d \
 	-e MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD \
 	-e MYSQL_DATABASE=$MYSQL_DATABASE \
 	--name xsr-mysql \
-	mysql:5.7
+	mysql:5.7 && \
 echo "Lanzado contenedor MySQL"
+
+# Crear la base de datos
+docker cp config/xsrdb.sql xsr-mysql:/tmp/xsrdb.sql
+docker exec xsr-mysql /bin/bash -c "mysql -u root -p$MYSQL_ROOT_PASSWORD < /tmp/xsrdb.sql" && echo "DB creada"
 
 # Lanzar el contenedor de XSR
 docker run -d -p 10097:10097 \
@@ -44,5 +45,5 @@ docker run -d -p 10097:10097 \
 	--network-alias xsr-srv \
 	-v $CONFIG_FILE:/etc/xsrd.conf \
 	--name xsr-srv \
-	xsr
+	xsr && \
 echo "Lanzado contenedor XSR"

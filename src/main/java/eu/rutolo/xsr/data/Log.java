@@ -7,16 +7,14 @@ import eu.rutolo.xsr.Main;
  */
 public class Log {
 
-	private static int logLevel = Main.conf.getLogLevel();
-
 	public static void e(String s) {
-		if (logLevel <= 1) {
+		if (Main.conf.getLogLevel() <= 1) {
 			System.out.println(s);
 		}
 	}
 	
 	public static void i(String s) {
-		if (logLevel <= 3) {
+		if (Main.conf.getLogLevel() <= 3) {
 			System.out.println(s);
 		}
 	}

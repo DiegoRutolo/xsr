@@ -1,15 +1,13 @@
 package eu.rutolo.xsr.data;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
 public class Config {
 
-	public static final String CONF_FILE = "/etc/xsrs.conf";
-	public static final int DEFAULT_LOG_LEVEL = 3;
+	public static final String CONF_FILE = "/etc/xsrd.conf";
+	public static final int DEFAULT_LOG_LEVEL = 4;
 
 	private Properties prop;
 
@@ -20,7 +18,8 @@ public class Config {
 			is = new FileInputStream(CONF_FILE);
 			prop.load(is);
 		} catch(Exception e) {
-			Log.e("Error al leer configuración.");
+			e.printStackTrace();
+			System.out.println("Error al leer configuración.");
 			System.exit(1);
 		}
 	}
