@@ -25,11 +25,11 @@ public class Config {
 	}
 
 	public int getLogLevel() {
-		int l = 3;
+		int l;
 		try {
 			l = Integer.parseInt(prop.getProperty("LOG_LEVEL"));
 		} catch (Exception e) {
-			l = 3;
+			l = DEFAULT_LOG_LEVEL;
 		}
 		return l;
 	}

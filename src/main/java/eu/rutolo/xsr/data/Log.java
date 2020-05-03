@@ -8,13 +8,13 @@ import eu.rutolo.xsr.Main;
 public class Log {
 
 	public static void e(String s) {
-		if (Main.conf.getLogLevel() <= 1) {
-			System.out.println(s);
+		if (Main.conf.getLogLevel() >= 1) {
+			System.err.println(s);
 		}
 	}
 	
 	public static void i(String s) {
-		if (Main.conf.getLogLevel() <= 3) {
+		if (Main.conf.getLogLevel() >= 3) {
 			System.out.println(s);
 		}
 	}
