@@ -50,7 +50,7 @@ public class Peticion {
 		}
 
 		// apartado
-		switch (content.getJSONObject("operacion").getString("apaartado")) {
+		switch (content.getJSONObject("operacion").getString("apartado")) {
 			case "x_clientes":
 				this.apartado = Peticion.X_CLIENTES;
 				break;
@@ -69,6 +69,9 @@ public class Peticion {
 
 		// datos
 		this.datos = content.getJSONObject("operacion").getJSONObject("datos");
+
+		Log.d("Creado objeto Petición");
+		Log.d("Tipo: " + this.tipo + "; Apartado: " + this.apartado);
 	}
 	
 	//#region Getters
@@ -96,6 +99,10 @@ public class Peticion {
 			throw new RuntimeException("Inclonable");
 		}
 		*/	
+	}
+
+	public JSONObject getDatos() {
+		return datos;
 	}
 	//#endregion
 }

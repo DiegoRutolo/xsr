@@ -52,8 +52,8 @@ fi
 # Lanzar el contenedor de XSR
 docker run -d -p 10097:10097 \
 	--network $NETNAME \
-	--network-alias xsr-srv \
+	--network-alias xsr \
 	-v $CONFIG_FILE:/etc/xsrd.conf \
-	--name xsr-srv \
+	--name xsr \
 	xsr && \
 echo "Lanzado contenedor XSR"

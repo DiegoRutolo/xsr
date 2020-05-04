@@ -20,6 +20,8 @@ public class Main {
 
 		conf = new Config();
 
+		System.out.println("Iniciado servidor con LogLevel " + conf.getLogLevel());
+
 		ServerSocket ss;
 		try {
 			ss = new ServerSocket(PORT);
