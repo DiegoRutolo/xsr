@@ -18,6 +18,8 @@ Este aparatado explica a estructura dos mensaxes intercambiados entres os client
 
 ### Peticións
 
+As peticións consisten en Peticións HTTP POST.
+
 O corpo das peticións (o JSON) envíase encriptado cunha clave privada que identifica o cliente.
 O servidor utiliza a clave pública para descifralo e identificar o cliente autorizado.
 
@@ -42,9 +44,10 @@ O corpo das peticións ten sempre esta estructura:
 
 Exemplo de petición para consultar crear, editar e eliminar un cliente
 ```
-GET / HTTP/1.1
+POST / HTTP/1.1
 HOST: servidor:10097
 Content-Type: applicaiton/json
+Content-Length: <LENGTH>
 Accept: application/json
 
 {
@@ -63,6 +66,7 @@ Accept: application/json
 POST / HTTP/1.1
 HOST: servidor:10097
 Content-Type: applicaiton/json
+Content-Length: <LENGTH>
 Accept: application/json
 
 {
@@ -85,9 +89,10 @@ Accept: application/json
 ```
 
 ```
-PUT / HTTP/1.1
+POST / HTTP/1.1
 HOST: servidor:10097
 Content-Type: applicaiton/json
+Content-Length: <LENGTH>
 Accept: application/json
 
 {
@@ -111,9 +116,10 @@ Accept: application/json
 ```
 
 ```
-DELETE / HTTP/1.1
+POST / HTTP/1.1
 HOST: servidor:10097
 Content-Type: applicaiton/json
+Content-Length: <LENGTH>
 Accept: application/json
 
 {
@@ -137,6 +143,7 @@ Exemplo de peticións para crear ou eliminar pedidos
 POST / HTTP/1.1
 HOST: servidor:10097
 Content-Type: applicaiton/json
+Content-Length: <LENGTH>
 Accept: application/json
 
 {
@@ -159,9 +166,10 @@ Accept: application/json
 ```
 
 ```
-DELETE / HTTP/1.1
+POST / HTTP/1.1
 HOST: servidor:10097
 Content-Type: applicaiton/json
+Content-Length: <LENGTH>
 Accept: application/json
 
 {
@@ -207,9 +215,10 @@ Content-Length: 0
 
 Exemplo de petición e resposta de consulta de datos
 ```
-GET / HTTP/1.1
+POST / HTTP/1.1
 HOST: servidor:10097
 Content-Type: applicaiton/json
+Content-Length: <LENGTH>
 Accept: application/json
 
 {
@@ -233,7 +242,7 @@ Accept: application/json
 HTTP/1.1 200 OK
 Server: xsrd/1.0
 Content-Type: application/json
-Content-Length: 886
+Content-Length: <LENGTH>
 
 {[
 	{

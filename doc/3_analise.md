@@ -31,6 +31,8 @@ Estas son as operacións que poden realizar os usuarios dende o cliente.
 
 Estos son parámetros de configuración xeral. Modifícanse mediante un arquivo de configuración no servidor. É necesario reiniciar para aplicar os cambios.
 
+ * Servidor, nome, porto, usuairo e contrasinal da base de datos
+ * Nivel de log
  * Activar ou desactivar a autentificación de clientes
  * Engadir ou eliminar claves públicas dos clientes autorizados
  * Engadir e eliminar roles.
@@ -41,10 +43,10 @@ Por defecto existen 2 roles con ester permisos, pero é posible crear outros med
 
 > {\+, %, -} => {engadir, modificar, eliminar}
 
-| Rol				| clientes	| pezas	| reparacións	| pedidos |
-| --- 			| :---:			| :---:	| :---:				| :---:		|
-| xerente		| +%-				| +%-		| +%-					| +%-			|
-| currante	| +					| +%-		| +%					| +-			|
+| Rol		| clientes	| pezas	| reparacións	| pedidos |
+| --- 		| :---:		| :---:	| :---:			| :---:	|
+| xerente	| +%-		| +%-	| +%-			| +%-	|
+| currante	| +			| +%-	| +%			| +-	|
 
 
 -------------------------------
@@ -87,22 +89,20 @@ A continuación detállanse os requerimentos non funcionais máis importantes.
 
 A continuación están especificados os requerimentos de hardware se software para o servidor.
 
-Para os clientes será necesario consultar a documentación específica de cada un.
-
 ### Software
 
-O servidor utiliza Docker, polo que calquera plataforma soportada por éste será adecuada. Recoméndase Linux, xa que é a plataforma na que se leva o desenvolvemento.
+O servidor está implementado sobre Docker, polo que calquera plataforma soportada por éste será adecuada. Recoméndase Linux, xa que é a plataforma na que se leva o desenvolvemento.
 
 ### Hardware requerido
 
-O software do servidor estará aloxado nun servidor físico con conexión de rede. Os requisitos mínimos de hardware son os mínimos para executar [Docker Engine](https://docs.docker.com/engine/install/). Na práctica son moi baixos, sendo posible instalalo incluso nunha [Raspberry Pi](https://www.raspberrypi.org/blog/docker-comes-to-raspberry-pi/).
+O software do servidor estará aloxado nun servidor con conexión de rede. Os requisitos mínimos de hardware son os mínimos para executar [Docker Engine](https://docs.docker.com/engine/install/). Na práctica son moi baixos, sendo posible instalalo incluso nunha [Raspberry Pi](https://www.raspberrypi.org/blog/docker-comes-to-raspberry-pi/).
 
 ----------------------------------------
 
 ## Interfaces externos
 
- * O servidor comunícase mediante os clientes a través dunha API REST.
- * Os clientes envían toda a información necesaria para cada operación con cada petición.
+ * O servidor comunícase mediante os clientes a través de peticións HTTP.
+ * Os clientes envían toda a información necesaria para a operación con cada petición.
  * O servidor envía as respostas en formato JSON.
 
 -----------------------------------------
@@ -111,6 +111,7 @@ O software do servidor estará aloxado nun servidor físico con conexión de red
 
 A continuación detállanse algunhas posibles ideas para mellorar XSR.
 
+ * Mellorar a seguridade
  * Aumentar o número de operacions
- * Implementación de novos clientes
+ * Implementación de clientes
  * Soporte para Docker Swarm para mellorar a escalabilidade

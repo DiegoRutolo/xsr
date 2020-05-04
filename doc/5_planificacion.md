@@ -79,7 +79,59 @@ Algunhas destas clases son:
 
 **Obxetivo**: Poder crear, consultar e actualizar pezas. Interactuar co cliente mediante JSON.
 
----------------------------------------
+----------------------------
+
+### Fase 5: Pedidos
+
+**Duración**: 2 días
+
+**Descrición**: Implememntar xestión de *Pedidos*, de forma que se poidan asociar *Pezas* con *Clientes*.
+
+#### Tarefa 1: Clases
+
+**Descrición**: Crear a Clase *Pedidos* e os métodos de *Operacións*
+
+#### Tarefa 2: Respostas
+
+**Descrición**: Métodos no servidor para interpretar as peticións entrantes, compoñer a resposta adecuada e enviala.
+
+---------------------
+
+### Fase 6: Reparacións
+
+**Duración**: 3 días
+
+**Descrición**: Xestión de *Reparacións*.
+
+**Obxetivo**: Poder crear, consultar e actualizar *Pedidos* de forma que se asocien cos clientes e as pezas.
+
+#### Tarefa 1: Clases
+
+**Descrición**: Crear a Clase *Reparacion* e os métodos de *Operacións*
+
+#### Tarefa 2: Respostas
+
+**Descrición**: Métodos no servidor para interpretar as peticións entrantes, compoñer a resposta adecuada e enviala. A resposta inclúe todos os datos das pezas e clientes asociados.
+
+----------------------
+
+### Fase 7: Cifrado
+
+**Duración**: 6 días
+
+**Descrición**: Implementación de HTTPS e cifrado asimétrico das peticións.
+
+**Obxetivo**: Establecer unha conexión HTTPS e interpretar os datos recibidos.
+
+#### Tarefa 1: HTTPS
+
+**Descrición**: Cambiar a conexión HTTP por HTTPS
+
+#### Tarefa 2: Cifrado do corpo
+
+**Descrición**: Mecanismo para descifrar o corpo das peticións.
+
+----------------------
 
 ## Diagrama de Gantt
 
@@ -104,11 +156,16 @@ Con estes cálculos saen 4.8 kWh/día -> 0,356112 €/día
 | Fase 2		| 5 días	| 451.75	|
 | Fase 3		| 4 dáis	| 361.44	|
 | Fase 4		| 2 días	| 180.72	|
+| Fase 5		| 2 días	| 180.72	|
+| Fase 6		| 3 días	| 271.08	|
+| Fase 7		| 6 días	| 542.16	|
 |				|			|			|
-|				| TOTAL		| 993.91	|
+|				| TOTAL		| 1987.87	|
 
 ## WEBGRAFÍA
-Guía para a elaboración de proyectos. Gobierno Vasco.
+ * Convenio colectivo estatal de empresas de consultoría y estudios
+de mercado: https://www.boe.es/eli/es/res/2018/02/22/(3)/dof/spa/pdf
+ * Guía para a elaboración de proyectos. Gobierno Vasco.
 https://www.pluralismoyconvivencia.es/upload/19/71/guia_elaboracion_proyectos_c.pdf  (páxina 49 e seguintes)
 
 

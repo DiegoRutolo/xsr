@@ -25,7 +25,7 @@ Neste apartado estudiaráse a viabilidad á hora de desenvolver o sistema.
 
 Os requisitos técnicos para a implementación do sistema son bastante baixos, xa que é un producto puramente software.
 
-Dispoñendo de algún recurso de hardware adicional, como lectores de códigos de barras ou lectores QR (un smartphone podería valer) sería posible desenvolver algunha ferramenta extra que permita ó usuario automatizar algunhas tareas.
+Dispoñendo de algún recurso de hardware adicional, como lectores de códigos de barras ou lectores QR (un smartphone podería valer) sería posible desenvolver algunha ferramenta extra que permita ó usuario automatizar algunhas tarefas.
 
 #### Viabilidade económica
 
