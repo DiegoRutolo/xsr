@@ -18,4 +18,10 @@ public class Log {
 			System.out.println(s);
 		}
 	}
+
+	public static void d(String s) {
+		if (Main.conf.getLogLevel() >= 4) {
+			System.out.println(s);
+		}
+	}
 }

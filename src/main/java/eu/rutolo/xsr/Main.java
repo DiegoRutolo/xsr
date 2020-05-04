@@ -5,6 +5,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 import eu.rutolo.xsr.data.Config;
+import eu.rutolo.xsr.server.Servidor;
 
 /**
  * Hello world!
