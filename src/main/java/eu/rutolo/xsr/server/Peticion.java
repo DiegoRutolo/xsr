@@ -14,8 +14,7 @@ public class Peticion {
 
 	private int tipo;
 	private int apartado;
-	private int length;
-	private JSONObject content;
+	private JSONObject content;		// https://stleary.github.io/JSON-java/index.html
 
 	public Peticion(String reqStr) {
 		
