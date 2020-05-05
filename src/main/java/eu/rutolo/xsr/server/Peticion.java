@@ -1,8 +1,5 @@
 package eu.rutolo.xsr.server;
 
-import java.io.BufferedReader;
-import java.util.function.Consumer;
-
 import org.json.JSONObject;
 
 import eu.rutolo.xsr.data.Log;
