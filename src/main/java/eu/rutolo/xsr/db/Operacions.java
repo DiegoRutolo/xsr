@@ -22,7 +22,7 @@ public class Operacions {
 	 */
 	public Operacions() {
 		try {
-			Class.forName("com.mysql.jc.jdbc.Driver");
+			Class.forName("com.mysql.jdbc.Driver");
 		} catch (final ClassNotFoundException e) {
 			e.printStackTrace();
 			System.exit(1);
