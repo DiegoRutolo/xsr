@@ -95,7 +95,7 @@ public class Operacions {
 			ps.setInt(1, id);
 			ResultSet rs = ps.executeQuery();
 
-			if (rs.first()) {
+			if (rs.next()) {
 				c = new Cliente(
 						rs.getInt("id"),
 						rs.getString("nome"),
