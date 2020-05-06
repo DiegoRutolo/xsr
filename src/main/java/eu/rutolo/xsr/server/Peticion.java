@@ -66,9 +66,6 @@ public class Peticion {
 
 		// datos
 		this.datos = content.getJSONObject("operacion").getJSONObject("datos");
-
-		Log.d("Creado objeto Petición");
-		Log.d("Tipo: " + this.tipo + "; Apartado: " + this.apartado);
 	}
 	
 	//#region Getters
