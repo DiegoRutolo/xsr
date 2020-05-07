@@ -18,35 +18,39 @@ public class Respuesta {
 	}
 
 	public static Respuesta getRespuesta(Peticion p) {
-		return getRespuesta(p, true);
+		return getRespuesta(p.getTipo(), true);
 	}
-	public static Respuesta getRespuesta(Peticion p, boolean exito) {
-		return getRespuesta(p.getTipo(), exito, new JSONObject());
+	public static Respuesta getRespuesta(int tipoPet, boolean exito) {
+		return getRespuesta(tipoPet, exito, new JSONObject());
 	}
 
+	/**
+	 * Método para crear objetos Respuesta.
+	 * @param tipoPet	Tipo de petición
+	 * @param exito		Si la petición se procesó correctamente
+	 * @param content	Datos a devolver
+	 * @return			Objeto Respuesta preparado para enviar al cliente.
+	 */
 	public static Respuesta getRespuesta(int tipoPet, boolean exito, JSONObject content) {
 		Respuesta r = new Respuesta();
 
 		if (exito) {
 			switch (tipoPet) {
 				case Peticion.GET:
+				case Peticion.DELETE:
 					r.code = 200;
 					r.codeStr = "OK";
 					r.content = content.toString();
 					break;
+
 				case Peticion.CREATE:
+				case Peticion.UPDATE:
 					r.code = 201;
 					r.codeStr = "Created";
 					r.content = "{}";
 					break;
-				case Peticion.UPDATE:
-					
-					break;
-				case Peticion.DELETE:
-					
-					break;
+
 				default:
-					
 					break;
 			}
 		} else {

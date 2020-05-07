@@ -121,7 +121,7 @@ public class Peticion {
 		return content;
 	}
 
-	public JSONObject getSelc() {
+	public JSONObject getSelec() {
 		return selec;
 	}
 

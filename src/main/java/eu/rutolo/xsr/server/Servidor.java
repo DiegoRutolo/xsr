@@ -136,19 +136,50 @@ public class Servidor extends Thread {
 	}
 
 	private void peticionUpdate(Peticion p) throws IOException {
+		boolean exito = false;
 		switch (p.getApartado()) {
 			case Peticion.X_CLIENTES:
-				return;
+				int id = Integer.parseInt(p.getSelec().getString("id"));
+				Cliente c = op.getCliente(id);
+				// Modificar los datos nuevos en el objeto
+				try {
+					c.setNome(
+						p.getDatos().getString("nome")
+					);
+				} catch (Exception e) {}
+
+				try {
+					c.setTlf(
+						p.getDatos().getString("tlf")
+					);
+				} catch (Exception e) {}
+
+				try {
+					c.setEmail(
+						p.getDatos().getString("email")
+					);
+				} catch (Exception e) {}
+
+				try {
+					c.setNotas(
+						p.getDatos().getString("notas")
+					);
+				} catch (Exception e) {}
+
+				exito = op.updateCliente(c);
+				break;
 			case Peticion.X_PEZAS:
-				return;
+				break;
 			case Peticion.X_PEDIDOS:
-				return;
+				break;
 			case Peticion.X_REPARACIONS:
-				return;
+				break;
 			default:
 				peticionError(p);
 				return;
 		}
+
+		enviarRespuesta(Respuesta.getRespuesta(p.getTipo(), exito));
 	}
 
 	private void peticionDelete(Peticion p) throws IOException {
@@ -169,7 +200,7 @@ public class Servidor extends Thread {
 
 	private void peticionError(Peticion p) throws IOException {
 		Log.i("Petición errónea");
-		enviarRespuesta(Respuesta.getRespuesta(p, false));
+		enviarRespuesta(Respuesta.getRespuesta(p.getTipo(), false));
 	}
 
 	private void enviarRespuesta(Respuesta r) throws IOException {
@@ -177,7 +208,6 @@ public class Servidor extends Thread {
 		BufferedOutputStream dataOut = new BufferedOutputStream(soc.getOutputStream());
 
 		for (String s : r.getHeaders()) {
-			Log.d("Escribiendo " + s);
 			out.println(s);
 		}
 		out.flush();
