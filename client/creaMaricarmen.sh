@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# Crea un cliente de nombre Maria del Carmen
+
 curl -v -H "Content-Type: application/json" \
 	-d '{
 		"usuario": {

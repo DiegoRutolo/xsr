@@ -1,14 +1,15 @@
 #!/usr/bin/env bash
 
-curl -v -H "Content-Type: application/json" \
+# Muestra todos los clientes
+
+curl -H "Content-Type: application/json" \
 	-d '{
 		"usuario": {
 			"rol": "xerente"
 		},
 		"operacion": {
 			"apartado": "x_clientes",
-			"tipo": "get",
-			"datos": {}
+			"tipo": "get"
 		}
 	}' \
-	localhost:10097
+	localhost:10097 | jq
