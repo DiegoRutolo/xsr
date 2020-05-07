@@ -9,10 +9,7 @@ ID=$(curl -H "Content-Type: application/json" \
 		},
 		"operacion": {
 			"apartado": "x_clientes",
-			"tipo": "get",
-			"datos": {
-				"nome": "Pepito"
-			}
+			"tipo": "get"
 		}
 	}' \
 	localhost:10097 | \
@@ -29,7 +26,7 @@ curl -v -H "Content-Type: application/json" \
 			"apartado": "x_clientes",
 			"tipo": "update",
 			"selec": {
-				"id": "'$ID'
+				"id": "'$ID'"
 			},
 			"datos": {
 				"tlf": "+27888888888"
