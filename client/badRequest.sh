@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# Ejemplo de petición inválida
+
 curl -v -H "Content-Type: application/json" \
 	-d '{
 		"usuario": {
