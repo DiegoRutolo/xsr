@@ -22,6 +22,7 @@ public class Peticion {
 	private int tipo;
 	private int apartado;
 	private JSONObject content;
+	private JSONObject selec;
 	private JSONObject datos;
 
 	public Peticion(String contentString) {
@@ -89,8 +90,18 @@ public class Peticion {
 
 		}
 
+		// selec
+		try {
+			this.selec = content.getJSONObject("operacion").getJSONObject("selec");
+		} catch (Exception e) {
+			this.selec = new JSONObject();
+		}
 		// datos
-		this.datos = content.getJSONObject("operacion").getJSONObject("datos");
+		try {
+			this.datos = content.getJSONObject("operacion").getJSONObject("datos");
+		} catch (Exception e) {
+			this.datos = new JSONObject();
+		}
 	}
 	
 	//#region Getters
@@ -108,6 +119,10 @@ public class Peticion {
 
 	public JSONObject getContent() {
 		return content;
+	}
+
+	public JSONObject getSelc() {
+		return selec;
 	}
 
 	public JSONObject getDatos() {
