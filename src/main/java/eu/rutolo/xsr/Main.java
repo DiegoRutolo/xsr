@@ -5,6 +5,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 import eu.rutolo.xsr.data.Config;
+import eu.rutolo.xsr.db.Operacions;
 import eu.rutolo.xsr.server.Servidor;
 
 /**
@@ -15,10 +16,12 @@ public class Main {
 
 	public static final int PORT = 10097;
 	public static Config conf;
+	public static Operacions db;
 
 	public static void main(String[] args) {
 
 		conf = new Config();
+		db = new Operacions();
 
 		System.out.println("Iniciado servidor con LogLevel " + conf.getLogLevel());
 

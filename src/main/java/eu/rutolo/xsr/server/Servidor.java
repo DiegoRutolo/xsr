@@ -5,11 +5,11 @@ import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.ArrayList;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import eu.rutolo.xsr.Main;
 import eu.rutolo.xsr.data.Log;
 import eu.rutolo.xsr.db.Cliente;
 import eu.rutolo.xsr.db.Operacions;
@@ -21,8 +21,7 @@ public class Servidor extends Thread {
 
 	private Socket soc;
 	private Operacions op;
-	private boolean exito = false;
-
+	
 	public Servidor(Socket soc) {
 		this.soc = soc;
 	}
@@ -32,7 +31,7 @@ public class Servidor extends Thread {
 		Log.i("Recibida petición de " + soc.getInetAddress().getHostName() + ":" + soc.getPort());
 
 		// Conexion DB
-		op = new Operacions();
+		op = Main.db;
 
 		try {
 			procesar();
@@ -60,6 +59,7 @@ public class Servidor extends Thread {
 
 		Peticion p = new Peticion(dataString);
 
+		// Comprueba tipo
 		switch (p.getTipo()) {
 			case Peticion.GET:
 				peticionGet(p);
@@ -88,7 +88,6 @@ public class Servidor extends Thread {
 					arr.put(new JSONObject(c));
 				}
 				result.put("data", arr);
-				exito = true;
 				break;
 			case Peticion.X_PEZAS:
 				break;
@@ -97,23 +96,11 @@ public class Servidor extends Thread {
 			case Peticion.X_REPARACIONS:
 				break;
 			default:
-				break;
+				peticionError(p);
+				return;
 		}
 
-		// componer y enviar respuesta
-		Respuesta r = Respuesta.getRespuesta(p, exito, result);
-		
-		PrintWriter out = new PrintWriter(soc.getOutputStream());
-		BufferedOutputStream dataOut = new BufferedOutputStream(soc.getOutputStream());
-
-		for (String s : r.getHeaders()) {
-			Log.d("Escribiendo " + s);
-			out.println(s);
-		}
-		out.flush();
-
-		dataOut.write(r.getContent().getBytes(), 0, r.getContentLength());
-		dataOut.flush();
+		enviarRespuesta(Respuesta.getRespuesta(p, result));
 	}
 
 	private void peticionCreate(Peticion p) throws IOException {
@@ -121,7 +108,7 @@ public class Servidor extends Thread {
 			case Peticion.X_CLIENTES:
 				// Crear cliente
 				JSONObject clj = p.getDatos().getJSONObject("cliente");
-				exito = op.addCliente(
+				boolean exito = op.addCliente(
 					clj.getString("nome"),
 					clj.getString("tlf"),
 					clj.getString("email"),
@@ -141,11 +128,51 @@ public class Servidor extends Thread {
 			case Peticion.X_REPARACIONS:
 				break;
 			default:
-				break;
+				peticionError(p);
+				return;
 		}
 
-		// componer y enviar respuesta
-		Respuesta r = Respuesta.getRespuesta(p, exito);
+		enviarRespuesta(Respuesta.getRespuesta(p));
+	}
+
+	private void peticionUpdate(Peticion p) throws IOException {
+		switch (p.getApartado()) {
+			case Peticion.X_CLIENTES:
+				return;
+			case Peticion.X_PEZAS:
+				return;
+			case Peticion.X_PEDIDOS:
+				return;
+			case Peticion.X_REPARACIONS:
+				return;
+			default:
+				peticionError(p);
+				return;
+		}
+	}
+
+	private void peticionDelete(Peticion p) throws IOException {
+		switch (p.getApartado()) {
+			case Peticion.X_CLIENTES:
+				return;
+			case Peticion.X_PEZAS:
+				return;
+			case Peticion.X_PEDIDOS:
+				return;
+			case Peticion.X_REPARACIONS:
+				return;
+			default:
+				peticionError(p);
+				return;
+		}
+	}
+
+	private void peticionError(Peticion p) throws IOException {
+		Log.i("Petición errónea");
+		enviarRespuesta(Respuesta.getRespuesta(p, false));
+	}
+
+	private void enviarRespuesta(Respuesta r) throws IOException {
 		PrintWriter out = new PrintWriter(soc.getOutputStream());
 		BufferedOutputStream dataOut = new BufferedOutputStream(soc.getOutputStream());
 
@@ -157,39 +184,5 @@ public class Servidor extends Thread {
 
 		dataOut.write(r.getContent().getBytes(), 0, r.getContentLength());
 		dataOut.flush();
-	}
-
-	private void peticionUpdate(Peticion p) {
-		switch (p.getApartado()) {
-			case Peticion.X_CLIENTES:
-				return;
-			case Peticion.X_PEZAS:
-				return;
-			case Peticion.X_PEDIDOS:
-				return;
-			case Peticion.X_REPARACIONS:
-				return;
-			default:
-				return;
-		}
-	}
-
-	private void peticionDelete(Peticion p) {
-		switch (p.getApartado()) {
-			case Peticion.X_CLIENTES:
-				return;
-			case Peticion.X_PEZAS:
-				return;
-			case Peticion.X_PEDIDOS:
-				return;
-			case Peticion.X_REPARACIONS:
-				return;
-			default:
-				return;
-		}
-	}
-
-	private void peticionError(Peticion p) {
-
 	}
 }

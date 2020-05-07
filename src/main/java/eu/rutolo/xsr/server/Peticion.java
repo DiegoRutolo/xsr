@@ -2,12 +2,15 @@ package eu.rutolo.xsr.server;
 
 import org.json.JSONObject;
 
+import eu.rutolo.xsr.data.Log;
+
 public class Peticion {
 	// Codigos de tipo de petición
 	public static final int GET = 1;
 	public static final int CREATE = 2;
 	public static final int UPDATE = 3;
 	public static final int DELETE = 4;
+	public static final int ERROR = 400;
 
 	// Codigos de Apartado
 	public static final int X_CLIENTES = 5;
@@ -22,10 +25,26 @@ public class Peticion {
 	private JSONObject datos;
 
 	public Peticion(String contentString) {
-		this.content = new JSONObject(contentString.substring(contentString.indexOf("{")));
+		Log.d("Recibido: ");
+		Log.d(contentString);
+		try {
+			this.content = new JSONObject(contentString.substring(contentString.indexOf("{")));
+		} catch (Exception e) {
+			this.tipo = Peticion.ERROR;
+			this.apartado = Peticion.ERROR;
+			return;
+		}
 		
 		// tipos
-		switch (content.getJSONObject("operacion").getString("tipo")) {
+		String strTipo = "";
+		try {
+			strTipo = content.getJSONObject("operacion").getString("tipo");
+		} catch (Exception e) {
+			this.tipo = Peticion.ERROR;
+			return;
+		}
+
+		switch (strTipo) {
 			case "get":
 				this.tipo = Peticion.GET;
 				break;
@@ -39,11 +58,19 @@ public class Peticion {
 				this.tipo = Peticion.DELETE;
 				break;
 			default:
-				this.tipo = 400;
+				this.tipo = Peticion.ERROR;
+				return;
 		}
 
 		// apartado
-		switch (content.getJSONObject("operacion").getString("apartado")) {
+		String strApartado = "";
+		try {
+			strApartado = content.getJSONObject("operacion").getString("apartado");
+		} catch (Exception e) {
+			this.apartado = Peticion.ERROR;
+			return;
+		}
+		switch (strApartado) {
 			case "x_clientes":
 				this.apartado = Peticion.X_CLIENTES;
 				break;
@@ -57,7 +84,9 @@ public class Peticion {
 				this.apartado = Peticion.X_REPARACIONS;
 				break;
 			default:
-				this.apartado = 400;
+				this.apartado = Peticion.ERROR;
+				return;
+
 		}
 
 		// datos
@@ -79,16 +108,6 @@ public class Peticion {
 
 	public JSONObject getContent() {
 		return content;
-
-		/*
-		try {
-			return (JSONObject) content.clone();
-		} catch (CloneNotSupportedException e) {
-			Log.e("No se puede clonar???");
-			e.printStackTrace();
-			throw new RuntimeException("Inclonable");
-		}
-		*/	
 	}
 
 	public JSONObject getDatos() {

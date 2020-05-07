@@ -13,6 +13,13 @@ public class Respuesta {
 	
 	private Respuesta() {}
 
+	public static Respuesta getRespuesta(Peticion p, JSONObject content) {
+		return getRespuesta(p, true, content);
+	}
+
+	public static Respuesta getRespuesta(Peticion p) {
+		return getRespuesta(p, true);
+	}
 	public static Respuesta getRespuesta(Peticion p, boolean exito) {
 		return getRespuesta(p, exito, new JSONObject());
 	}
@@ -42,6 +49,10 @@ public class Respuesta {
 					
 					break;
 			}
+		} else {
+			r.code = 400;
+			r.codeStr = "Bad Request";
+			r.content = "";
 		}
 
 		r.content += "\n";
@@ -56,7 +67,6 @@ public class Respuesta {
 		sb.add("Server: xsrd/"+Servidor.VERSION);
 		sb.add("Content-Type: application/json");
 		sb.add("Content-Length: " + contentLength);
-		sb.add("Connection: keep-alive");
 		sb.add("");
 
 		String[] t = new String[sb.size()];
