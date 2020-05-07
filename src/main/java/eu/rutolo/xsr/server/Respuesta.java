@@ -14,21 +14,21 @@ public class Respuesta {
 	private Respuesta() {}
 
 	public static Respuesta getRespuesta(Peticion p, JSONObject content) {
-		return getRespuesta(p, true, content);
+		return getRespuesta(p.getTipo(), true, content);
 	}
 
 	public static Respuesta getRespuesta(Peticion p) {
 		return getRespuesta(p, true);
 	}
 	public static Respuesta getRespuesta(Peticion p, boolean exito) {
-		return getRespuesta(p, exito, new JSONObject());
+		return getRespuesta(p.getTipo(), exito, new JSONObject());
 	}
 
-	public static Respuesta getRespuesta(Peticion p, boolean exito, JSONObject content) {
+	public static Respuesta getRespuesta(int tipoPet, boolean exito, JSONObject content) {
 		Respuesta r = new Respuesta();
 
 		if (exito) {
-			switch (p.getTipo()) {
+			switch (tipoPet) {
 				case Peticion.GET:
 					r.code = 200;
 					r.codeStr = "OK";
