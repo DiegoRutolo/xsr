@@ -56,8 +56,7 @@ Accept: application/json
 	},
 	"operacion": {
 		"apartado": "x_clientes",
-		"tipo": "get",
-		"selec": {}
+		"tipo": "get"
 	}
 }
 ```
@@ -103,7 +102,7 @@ Accept: application/json
 		"apartado": "x_clientes",
 		"tipo": "update",
 		"selec": {
-			"nome": "Pepito"
+			"id": "7869438"
 		},
 		"datos": {
 			"cliente": {
@@ -130,7 +129,7 @@ Accept: application/json
 		"apartado": "x_clientes",
 		"tipo": "delete",
 		"selec": {
-			"nome": "Pepito"
+			"id": "7869438"
 		}
 	}
 }
