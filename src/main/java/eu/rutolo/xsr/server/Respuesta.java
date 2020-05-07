@@ -22,8 +22,7 @@ public class Respuesta {
 				case Peticion.CREATE:
 					r.code = 201;
 					r.codeStr = "Created";
-					r.contentLength = 0;
-					r.content = "";
+					r.content = "{}";
 					break;
 				case Peticion.UPDATE:
 					
@@ -37,6 +36,8 @@ public class Respuesta {
 			}
 		}
 
+		r.content += "\n";
+		r.contentLength = r.content.getBytes().length;
 		return r;
 	}
 

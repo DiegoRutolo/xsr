@@ -2,8 +2,6 @@ package eu.rutolo.xsr.server;
 
 import org.json.JSONObject;
 
-import eu.rutolo.xsr.data.Log;
-
 public class Peticion {
 	// Codigos de tipo de petición
 	public static final int GET = 1;
@@ -23,10 +21,8 @@ public class Peticion {
 	private JSONObject content;
 	private JSONObject datos;
 
-	public Peticion(String rawReq) {
-		this.rawReq = rawReq;
-
-		this.content = new JSONObject(rawReq.substring(rawReq.indexOf("{")));
+	public Peticion(String contentString) {
+		this.content = new JSONObject(contentString.substring(contentString.indexOf("{")));
 		
 		// tipos
 		switch (content.getJSONObject("operacion").getString("tipo")) {

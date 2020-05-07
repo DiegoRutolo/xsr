@@ -2,6 +2,7 @@ package eu.rutolo.xsr.server;
 
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
+import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
@@ -43,17 +44,22 @@ public class Servidor extends Thread {
 	}
 
 	private void procesar() throws IOException {
-		BufferedReader br;
-		try {
-			br = new BufferedReader(new InputStreamReader(soc.getInputStream()));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return;
+		final int MAX_BUFFER = 1024;
+		DataInputStream dis = new DataInputStream(soc.getInputStream());
+		byte[] messageBytes = new byte[MAX_BUFFER];
+		String dataString = "";
+
+		while (true) {
+			int bytesRead = dis.read(messageBytes);
+			dataString += new String(messageBytes, 0, bytesRead);
+
+			if (bytesRead < MAX_BUFFER) {
+				break;
+			}
 		}
 
-		String reqStr = br.lines().collect(Collectors.joining("\n"));
-		Peticion p = new Peticion(reqStr);
+		String txt = "";
+		Peticion p = new Peticion(dataString);
 
 		switch (p.getTipo()) {
 			case Peticion.GET:
