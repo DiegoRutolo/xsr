@@ -1,17 +1,17 @@
 package eu.rutolo.xsr.server;
 
 import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import eu.rutolo.xsr.data.Log;
+import eu.rutolo.xsr.db.Cliente;
 import eu.rutolo.xsr.db.Operacions;
 
 public class Servidor extends Thread {
@@ -58,7 +58,6 @@ public class Servidor extends Thread {
 			}
 		}
 
-		String txt = "";
 		Peticion p = new Peticion(dataString);
 
 		switch (p.getTipo()) {
@@ -78,9 +77,32 @@ public class Servidor extends Thread {
 				peticionError(p);
 				break;
 		}
+	}
+
+	private void peticionGet(Peticion p) throws IOException {
+		JSONObject result = new JSONObject();
+		JSONArray arr = new JSONArray();
+		switch (p.getApartado()) {
+			case Peticion.X_CLIENTES:
+				for (Cliente c : op.listClientes()) {
+					arr.put(new JSONObject(c));
+				}
+				result.put("data", arr);
+				exito = true;
+				break;
+			case Peticion.X_PEZAS:
+				break;
+			case Peticion.X_PEDIDOS:
+				break;
+			case Peticion.X_REPARACIONS:
+				break;
+			default:
+				break;
+		}
 
 		// componer y enviar respuesta
-		Respuesta r = Respuesta.getRespuesta(p, exito);
+		Respuesta r = Respuesta.getRespuesta(p, exito, result);
+		
 		PrintWriter out = new PrintWriter(soc.getOutputStream());
 		BufferedOutputStream dataOut = new BufferedOutputStream(soc.getOutputStream());
 
@@ -94,22 +116,7 @@ public class Servidor extends Thread {
 		dataOut.flush();
 	}
 
-	private void peticionGet(Peticion p) {
-		switch (p.getApartado()) {
-			case Peticion.X_CLIENTES:
-				return;
-			case Peticion.X_PEZAS:
-				return;
-			case Peticion.X_PEDIDOS:
-				return;
-			case Peticion.X_REPARACIONS:
-				return;
-			default:
-				return;
-		}
-	}
-
-	private void peticionCreate(Peticion p) {
+	private void peticionCreate(Peticion p) throws IOException {
 		switch (p.getApartado()) {
 			case Peticion.X_CLIENTES:
 				// Crear cliente
@@ -125,17 +132,31 @@ public class Servidor extends Thread {
 				} else {
 					Log.e("No se pudo crear el cliente " + clj.getString("nome"));
 				}
-				return;
+				break;
 
 			case Peticion.X_PEZAS:
-				return;
+				break;
 			case Peticion.X_PEDIDOS:
-				return;
+				break;
 			case Peticion.X_REPARACIONS:
-				return;
+				break;
 			default:
-				return;
+				break;
 		}
+
+		// componer y enviar respuesta
+		Respuesta r = Respuesta.getRespuesta(p, exito);
+		PrintWriter out = new PrintWriter(soc.getOutputStream());
+		BufferedOutputStream dataOut = new BufferedOutputStream(soc.getOutputStream());
+
+		for (String s : r.getHeaders()) {
+			Log.d("Escribiendo " + s);
+			out.println(s);
+		}
+		out.flush();
+
+		dataOut.write(r.getContent().getBytes(), 0, r.getContentLength());
+		dataOut.flush();
 	}
 
 	private void peticionUpdate(Peticion p) {

@@ -2,6 +2,8 @@ package eu.rutolo.xsr.server;
 
 import java.util.ArrayList;
 
+import org.json.JSONObject;
+
 public class Respuesta {
 
 	private int code;
@@ -12,12 +14,18 @@ public class Respuesta {
 	private Respuesta() {}
 
 	public static Respuesta getRespuesta(Peticion p, boolean exito) {
+		return getRespuesta(p, exito, new JSONObject());
+	}
+
+	public static Respuesta getRespuesta(Peticion p, boolean exito, JSONObject content) {
 		Respuesta r = new Respuesta();
 
 		if (exito) {
 			switch (p.getTipo()) {
 				case Peticion.GET:
-					
+					r.code = 200;
+					r.codeStr = "OK";
+					r.content = content.toString();
 					break;
 				case Peticion.CREATE:
 					r.code = 201;
