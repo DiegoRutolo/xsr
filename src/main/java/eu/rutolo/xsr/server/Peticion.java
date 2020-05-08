@@ -18,12 +18,9 @@ public class Peticion {
 	public static final int X_PEDIDOS = 7;
 	public static final int X_REPARACIONS = 8;
 
-	private String rawReq;
 	private int tipo;
 	private int apartado;
 	private JSONObject content;
-	private JSONObject selec;
-	private JSONObject datos;
 
 	public Peticion(String contentString) {
 		Log.d("Recibido: ");
@@ -89,25 +86,9 @@ public class Peticion {
 				return;
 
 		}
-
-		// selec
-		try {
-			this.selec = content.getJSONObject("operacion").getJSONObject("selec");
-		} catch (Exception e) {
-			this.selec = new JSONObject();
-		}
-		// datos
-		try {
-			this.datos = content.getJSONObject("operacion").getJSONObject("datos");
-		} catch (Exception e) {
-			this.datos = new JSONObject();
-		}
 	}
 	
 	//#region Getters
-	public String getRawReq() {
-		return rawReq;
-	}
 
 	public int getTipo() {
 		return tipo;
@@ -122,11 +103,19 @@ public class Peticion {
 	}
 
 	public JSONObject getSelec() {
-		return selec;
+		try {
+			return content.getJSONObject("operacion").getJSONObject("selec");
+		} catch (Exception e) {
+			return new JSONObject();
+		}
 	}
 
 	public JSONObject getDatos() {
-		return datos;
+		try {
+			return content.getJSONObject("operacion").getJSONObject("datos");
+		} catch (Exception e) {
+			return new JSONObject();
+		}
 	}
 	//#endregion
 }
