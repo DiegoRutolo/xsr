@@ -183,19 +183,26 @@ public class Servidor extends Thread {
 	}
 
 	private void peticionDelete(Peticion p) throws IOException {
+		boolean exito = false;
+		JSONObject clienteBorrado = new JSONObject();
 		switch (p.getApartado()) {
 			case Peticion.X_CLIENTES:
-				return;
+				int id = Integer.parseInt(p.getSelec().getString("id"));
+				clienteBorrado = new JSONObject(op.getCliente(id));
+				exito = op.deleteCliente(id);
+				break;
 			case Peticion.X_PEZAS:
-				return;
+				break;
 			case Peticion.X_PEDIDOS:
-				return;
+				break;
 			case Peticion.X_REPARACIONS:
-				return;
+				break;
 			default:
 				peticionError(p);
 				return;
 		}
+
+		enviarRespuesta(Respuesta.getRespuesta(p.getTipo(), exito, clienteBorrado));
 	}
 
 	private void peticionError(Peticion p) throws IOException {
