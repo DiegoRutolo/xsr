@@ -1,6 +1,11 @@
 #!/usr/bin/env bash
 
-# Modifica el teléfono del primer cliente
+# Elimina el primer cliente
+
+if ! [[ $1 =~ ^[0-9]+$ ]]; then
+	echo "Indica un número"
+	exit 1
+fi
 
 ID=$(curl -H "Content-Type: application/json" \
 	-d '{
@@ -13,7 +18,7 @@ ID=$(curl -H "Content-Type: application/json" \
 		}
 	}' \
 	localhost:10097 | \
-jq -r '.data[0].id')
+jq -r '.data['$1'].id')
 
 echo Cambiando $ID
 
@@ -24,12 +29,9 @@ curl -v -H "Content-Type: application/json" \
 		},
 		"operacion": {
 			"apartado": "x_clientes",
-			"tipo": "update",
+			"tipo": "delete",
 			"selec": {
 				"id": "'$ID'"
-			},
-			"datos": {
-				"tlf": "+27888888888"
 			}
 		}
 	}' \
