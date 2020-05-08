@@ -13,7 +13,7 @@ CREATE TABLE Peza (
 	codigo		VARCHAR(100),
 	prov		VARCHAR(100),
 	nome		VARCHAR(100),
-	foto		LONGBLOB,
+	foto		TEXT,
 	cantidade	INT,
 	notas		TEXT
 );
