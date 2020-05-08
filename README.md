@@ -18,7 +18,7 @@ Pero non necesitas saber todo esto para instalala.
 
 Para cambiar os valores por defecto podes editar o arquivo `build.sh` e `config/xsrd.conf`. Asegúrate de que teñan o mesmo valor en ambolos dous.
 
-> CAMBIA O CONTRASINAL POR DEFECTO
+> **CAMBIA O CONTRASINAL POR DEFECTO**
 
 ### Linux
 
@@ -35,7 +35,7 @@ Para instalar XSR nun sistema Linux podes usar o script `build.sh`:
 
 ### Outros
 
-Podes ver o script de instalación `build.sh` e adaptar os comandos en orden para o teu sistema.
+Aínda que outros sitemas non teñan soporte, deberías poder instalar XSR sen moitos problemas. Podes ver o script de instalación `build.sh` e adaptar os comandos en orden para o teu sistema.
 
 Por exemplo, para Windows, o último comando que lanza o contenedor do servidor podería ser algo así:
 ```
@@ -49,10 +49,13 @@ Sendo unha aplicación docker toda a interación será a través desta ferrament
 
 A continuación detallanse os comandos mais interesantes:
 ```
-docker logs xsr-srv					# Consultar os logs
+docker logs xsr-srv			# Consultar os logs
 
 docker stop xsr-srv xsr-mysql		# Parar os contenedores
 docker start xsr-mysql xsr-srv		# Iniciar
+
+docker ps -a		# Ver todos os contenedores
+docker exec -it xsr-mysql /bin/bash -c 'mysql -p xsr'		# Executar MySQL de forma interactiva.
 ```
 
 ### Configuración
@@ -79,12 +82,10 @@ Tamén hai traduccións [*non oficiais*](https://www.gnu.org/licenses/translatio
 
 ## Índice
 
-> *TODO*: Simplemente indexa ordenadamente todo tu proyecto.
-
 1. [Idea](doc/1_idea.md)
 2. [Necesidades](doc/2_necesidades.md)
 3. [Análise](doc/3_analise.md)
-4. [Diseño](doc/4_deseño.md)
+4. [Deseño](doc/4_deseno.md)
 5. [Planificación](doc/5_planificacion.md)
 6. [Implantación](doc/templates/6_implantacion.md)
 

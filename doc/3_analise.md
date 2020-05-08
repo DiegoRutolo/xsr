@@ -7,9 +7,9 @@ XSR é un software, orientado a pequenos talleres de reparación, que axuda a ma
 
 A parte central da aplicación será o servidor, que leva asociada unha base de datos e garda toda a información necesaria.
 
-O servidor cominícase cos clientes mediante una API REST, e os usuarios só interactúan cos clientes.
+O servidor cominícase cos clientes mediante una API, e os usuarios só interactúan cos clientes.
 
-Por defecto, mensaxe que o cliente envíe o servidor debe ir firmado mediante clave asimétrica, de forma que só os clientes autorizados poidan operar.
+Por defecto, toda mensaxe que o cliente envíe o servidor debe ir firmado mediante clave asimétrica, de forma que só os clientes autorizados poidan operar.
 
 -----------------------------------------
 
@@ -26,6 +26,7 @@ Estas son as operacións que poden realizar os usuarios dende o cliente.
  * Rexistrar, editar e eliminar **reparacións**:
 	* Data ini, data fin, horas, completada(VF), causa, solución, cliente, pezas, notas
  * Asociar **pedidos** de clientes e pezas
+	* Peza, Cliente, estado
 
 ### Configuración
 
@@ -39,7 +40,7 @@ Estos son parámetros de configuración xeral. Modifícanse mediante un arquivo 
 
 ## Roles
 
-Por defecto existen 2 roles con ester permisos, pero é posible crear outros mediante a configuración.
+Por defecto existen 2 roles con estes permisos, pero será posible crear outros mediante a configuración.
 
 > {\+, %, -} => {engadir, modificar, eliminar}
 
@@ -79,9 +80,12 @@ A continuación detállanse os requerimentos non funcionais máis importantes.
 
 ### Éticos
 
+ * O software respetará [as 4 liberdades do software libre](http://www.aeromental.com/2009/08/16/richard-stallman-explica-los-4-niveles-de-libertad-de-un-software-libre/)
+
 ### Lexislativos
 
- * O software debe cumplir todos os requisitos marcados pola [LOPD](https://www.boe.es/boe/dias/2018/12/06/pdfs/BOE-A-2018-16673.pdf) e o [RXPG](https://www.rgpd.es/)
+ * O software debe cumplir todos os requisitos marcados pola [LOPD](https://www.boe.es/boe/dias/2018/12/06/pdfs/BOE-A-2018-16673.pdf) e o [RXPD](https://www.rgpd.es/)
+ * Segundo a [licencia da dependencia json.org](https://json.org/license.html), o software usaráse para o Ben, non o Mal.
 
 ---------------------------------
 
@@ -91,7 +95,7 @@ A continuación están especificados os requerimentos de hardware se software pa
 
 ### Software
 
-O servidor está implementado sobre Docker, polo que calquera plataforma soportada por éste será adecuada. Recoméndase Linux, xa que é a plataforma na que se leva o desenvolvemento.
+O servidor está implementado sobre Docker, polo que calquera plataforma soportada por éste será adecuada, pero só **Linux conta con soporte oficial**.
 
 ### Hardware requerido
 
@@ -101,9 +105,9 @@ O software do servidor estará aloxado nun servidor con conexión de rede. Os re
 
 ## Interfaces externos
 
- * O servidor comunícase mediante os clientes a través de peticións HTTP.
- * Os clientes envían toda a información necesaria para a operación con cada petición.
- * O servidor envía as respostas en formato JSON.
+ * O servidor comunícase mediante os clientes a través de peticións POST.
+ * Os clientes envían toda a información necesaria para a operación con cada petición en forma de JSON.
+ * O servidor envía as respostas usando os códigos HTTP 200 e 201. O 200 pode incluír datos en formato JSON.
 
 -----------------------------------------
 
@@ -112,6 +116,7 @@ O software do servidor estará aloxado nun servidor con conexión de rede. Os re
 A continuación detállanse algunhas posibles ideas para mellorar XSR.
 
  * Mellorar a seguridade
- * Aumentar o número de operacions
- * Implementación de clientes
+ * Mellorar a eficiencia
+ * Aumentar o número de operacions posibles
+ * Implementación de diversos clientes
  * Soporte para Docker Swarm para mellorar a escalabilidade

@@ -135,7 +135,7 @@ Accept: application/json
 }
 ```
 
-Para operar con pezas ou reparacións sería igual pero cambiando *x_clientes* por *x_pezas* ou *x_repar* respectivamente.
+Para operar con pezas ou reparacións sería igual pero cambiando *x_clientes* por *x_pezas* ou *x_reparacions* respectivamente.
 
 Exemplo de peticións para crear ou eliminar pedidos
 ```
@@ -193,9 +193,9 @@ Accept: application/json
 
 ### Respostas
 
-O servidor responde co código HTTP adecuado para cada situación, ademais dos estándar:
+O servidor responde co código HTTP adecuado para cada situación:
 
- * 200: OK, usado cando o cliente solidita datos
+ * 200: OK, usado cando o cliente solidita datos ou elimina unha entrada.
  * 201: Cando se efectúa un cambio CUD
  * 400: Error de sintaxe na petición
  * 401: O corpo non está cifrado cunha clave coñecida
