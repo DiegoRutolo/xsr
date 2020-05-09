@@ -140,6 +140,7 @@ public class Servidor extends Thread {
 						pezaJson.getString("prov"),
 						pezaJson.getString("nome"),
 						pezaJson.getString("foto"),
+						pezaJson.getBigDecimal("precio"),
 						pezaJson.getInt("cantidade"),
 						pezaJson.getString("notas")
 					);

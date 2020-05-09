@@ -1,20 +1,24 @@
 package eu.rutolo.xsr.db;
 
+import java.math.BigDecimal;
+
 public class Peza {
 	private int id;
 	private String codigo;
 	private String prov;
 	private String nome;
 	private String foto;
+	private BigDecimal precio;
 	private int cantidade;
 	private String notas;
 
-	public Peza(int id, String codigo, String prov, String nome, String foto, int cantidade, String notas) {
+	public Peza(int id, String codigo, String prov, String nome, String foto, BigDecimal precio, int cantidade, String notas) {
 		this.id = id;
 		this.codigo = codigo;
 		this.prov = prov;
 		this.nome = nome;
 		this.foto = foto;
+		this.precio = precio;
 		this.cantidade = cantidade;
 		this.notas = notas;
 	}
@@ -58,6 +62,14 @@ public class Peza {
 
 	public void setFoto(String foto) {
 		this.foto = foto;
+	}
+
+	public BigDecimal getPrecio() {
+		return this.precio;
+	}
+
+	public void setPrecio(BigDecimal precio) {
+		this.precio = precio;
 	}
 
 	public int getCantidade() {

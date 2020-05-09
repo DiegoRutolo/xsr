@@ -14,6 +14,7 @@ CREATE TABLE Peza (
 	prov		VARCHAR(100),
 	nome		VARCHAR(100),
 	foto		TEXT,
+	precio		DECIMAL(5,2),
 	cantidade	INT,
 	notas		TEXT
 );
@@ -26,6 +27,7 @@ CREATE TABLE Reparacion (
 	completa	BOOLEAN,
 	causa		TEXT,
 	solucion	TEXT,
+	pvp			DECIMAL(5,2),
 	notas		TEXT,
 	client_id	INT,
 
@@ -38,6 +40,7 @@ CREATE TABLE Reparacion (
 CREATE TABLE Pedido (
 	client_id	INT,
 	peza_id		INT,
+	pvp			DECIMAL(5,2),
 	estado		varchar(100),
 
 	PRIMARY KEY (client_id, peza_id),

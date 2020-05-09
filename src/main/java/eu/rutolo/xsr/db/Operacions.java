@@ -1,5 +1,6 @@
 package eu.rutolo.xsr.db;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -218,6 +219,7 @@ public class Operacions {
 						rs.getString("prov"),
 						rs.getString("nome"),
 						rs.getString("foto"),
+						rs.getBigDecimal("precio"),
 						rs.getInt("cantidade"),
 						rs.getString("notas")
 					);
@@ -245,6 +247,7 @@ public class Operacions {
 					rs.getString("prov"),
 					rs.getString("nome"),
 					rs.getString("foto"),
+					rs.getBigDecimal("precio"),
 					rs.getInt("cantidade"),
 					rs.getString("notas")
 				);
@@ -256,28 +259,29 @@ public class Operacions {
 		return p;
 	}
 
-	public boolean addPeza(String codigo, String prov, String nome, String foto, int cantidade, String notas) {
+	public boolean addPeza(String codigo, String prov, String nome, String foto, BigDecimal precio, int cantidade, String notas) {
 		int id = 0;
 		do {
 			id = rnd.nextInt();
 		} while (getCliente(id) != null);
 		
-		return addPeza(new Peza(id, codigo, prov, nome, foto, cantidade, notas));
+		return addPeza(new Peza(id, codigo, prov, nome, foto, precio, cantidade, notas));
 	}
 
 	public boolean addPeza(Peza p) {
 		try {
 			PreparedStatement ps = con.prepareStatement(
-					"INSERT INTO Peza (id, codigo, prov, nome, foto, cantidade, notas) " + 
-					"VALUES (?, ?, ?, ?, ?, ?, ?)"
+					"INSERT INTO Peza (id, codigo, prov, nome, foto, precio, cantidade, notas) " + 
+					"VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
 				);
 			ps.setInt(1, p.getId());
 			ps.setString(2, p.getCodigo());
 			ps.setString(3, p.getProv());
 			ps.setString(4, p.getNome());
 			ps.setString(5, p.getFoto());
-			ps.setInt(6, p.getCantidade());
-			ps.setString(7, p.getNotas());
+			ps.setString(6, p.getPrecio().toString());
+			ps.setInt(7, p.getCantidade());
+			ps.setString(8, p.getNotas());
 
 			return ps.executeUpdate() == 1 ? true : false;
 
@@ -292,16 +296,17 @@ public class Operacions {
 		try {
 			PreparedStatement ps = con.prepareStatement(
 					"UPDATE Peza " +
-					"SET codigo = ?, prov = ?, nome = ?, foto = ?, cantidade = ?, notas = ? " +
+					"SET codigo = ?, prov = ?, nome = ?, foto = ?, precio = ?, cantidade = ?, notas = ? " +
 					"WHERE id = ?"
 				);
 			ps.setString(1, p.getCodigo());
 			ps.setString(2, p.getProv());
 			ps.setString(3, p.getNome());
 			ps.setString(4, p.getFoto());
-			ps.setInt(5, p.getCantidade());
-			ps.setString(6, p.getNotas());
-			ps.setInt(7, p.getId());
+			ps.setString(5, p.getPrecio().toString());
+			ps.setInt(6, p.getCantidade());
+			ps.setString(7, p.getNotas());
+			ps.setInt(8, p.getId());
 
 			return ps.executeUpdate() == 1 ? true : false;
 
