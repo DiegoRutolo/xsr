@@ -15,3 +15,7 @@ Algúns, como o de eliminar ou modificar, precisan un número como argumento. Po
 ```
 	./delClient.sh 0
 ```
+
+## Links
+
+ * Ferramenta para convertir base64  a imaxe e viceversa: https://onlinepngtools.com/convert-png-to-base64
