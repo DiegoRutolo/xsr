@@ -13,6 +13,7 @@ import eu.rutolo.xsr.Main;
 import eu.rutolo.xsr.data.Log;
 import eu.rutolo.xsr.db.Cliente;
 import eu.rutolo.xsr.db.Operacions;
+import eu.rutolo.xsr.db.Peza;
 
 public class Servidor extends Thread {
 
@@ -90,6 +91,10 @@ public class Servidor extends Thread {
 				result.put("data", arr);
 				break;
 			case Peticion.X_PEZAS:
+				for (Peza peza : op.listPezas()) {
+					arr.put(new JSONObject(peza));
+				}
+				result.put("data", arr);
 				break;
 			case Peticion.X_PEDIDOS:
 				break;
@@ -104,11 +109,12 @@ public class Servidor extends Thread {
 	}
 
 	private void peticionCreate(Peticion p) throws IOException {
+		boolean exito = false;
 		switch (p.getApartado()) {
 			case Peticion.X_CLIENTES:
 				// Crear cliente
 				JSONObject clj = p.getDatos().getJSONObject("cliente");
-				boolean exito = op.addCliente(
+				exito = op.addCliente(
 					clj.getString("nome"),
 					clj.getString("tlf"),
 					clj.getString("email"),
@@ -122,7 +128,22 @@ public class Servidor extends Thread {
 				break;
 
 			case Peticion.X_PEZAS:
+				JSONObject pezaJson = p.getDatos().getJSONObject("peza");
+				exito = op.addPeza(
+					pezaJson.getString("codigo"),
+					pezaJson.getString("prov"),
+					pezaJson.getString("nome"),
+					pezaJson.getString("foto"),
+					pezaJson.getInt("cantidade"),
+					pezaJson.getString("notas")
+				);
+				if (exito) {
+					Log.i("Creada peza " + pezaJson.getString("nome"));
+				} else {
+					Log.e("No se pudo crear la pieza " + pezaJson.getString("nome"));
+				}
 				break;
+
 			case Peticion.X_PEDIDOS:
 				break;
 			case Peticion.X_REPARACIONS:
@@ -137,9 +158,10 @@ public class Servidor extends Thread {
 
 	private void peticionUpdate(Peticion p) throws IOException {
 		boolean exito = false;
+		int id = 0;
 		switch (p.getApartado()) {
 			case Peticion.X_CLIENTES:
-				int id = Integer.parseInt(p.getSelec().getString("id"));
+				id = Integer.parseInt(p.getSelec().getString("id"));
 				Cliente c = op.getCliente(id);
 				// Modificar los datos nuevos en el objeto
 				try {
@@ -168,12 +190,50 @@ public class Servidor extends Thread {
 
 				exito = op.updateCliente(c);
 				break;
+
 			case Peticion.X_PEZAS:
+				id = Integer.parseInt(p.getSelec().getString("id"));
+				Peza peza = op.getPeza(id);
+				try {
+					peza.setCodigo(
+						p.getDatos().getString("codigo")
+					);
+				} catch (Exception e) {}
+				try {
+					peza.setProv(
+						p.getDatos().getString("prov")
+					);
+				} catch (Exception e) {}
+				try {
+					peza.setNome(
+						p.getDatos().getString("nome")
+					);
+				} catch (Exception e) {}
+				try {
+					peza.setFoto(
+						p.getDatos().getString("foto")
+					);
+				} catch (Exception e) {}
+				try {
+					peza.setCantidade(
+						p.getDatos().getInt("cantidade")
+					);
+				} catch (Exception e) {}
+				try {
+					peza.setNotas(
+						p.getDatos().getString("notas")
+					);
+				} catch (Exception e) {}
+
+				exito = op.updatePeza(peza);
 				break;
+
 			case Peticion.X_PEDIDOS:
 				break;
+
 			case Peticion.X_REPARACIONS:
 				break;
+
 			default:
 				peticionError(p);
 				return;
@@ -183,16 +243,22 @@ public class Servidor extends Thread {
 	}
 
 	private void peticionDelete(Peticion p) throws IOException {
+		int id = 0;
 		boolean exito = false;
-		JSONObject clienteBorrado = new JSONObject();
+		JSONObject datoBorrado = new JSONObject();
 		switch (p.getApartado()) {
 			case Peticion.X_CLIENTES:
-				int id = Integer.parseInt(p.getSelec().getString("id"));
-				clienteBorrado = new JSONObject(op.getCliente(id));
+				id = Integer.parseInt(p.getSelec().getString("id"));
+				datoBorrado = new JSONObject(op.getCliente(id));
 				exito = op.deleteCliente(id);
 				break;
+
 			case Peticion.X_PEZAS:
+				id = Integer.parseInt(p.getSelec().getString("id"));
+				datoBorrado = new JSONObject(op.getPeza(id));
+				exito = op.deletePeza(id);
 				break;
+
 			case Peticion.X_PEDIDOS:
 				break;
 			case Peticion.X_REPARACIONS:
@@ -202,7 +268,7 @@ public class Servidor extends Thread {
 				return;
 		}
 
-		enviarRespuesta(Respuesta.getRespuesta(p.getTipo(), exito, clienteBorrado));
+		enviarRespuesta(Respuesta.getRespuesta(p.getTipo(), exito, datoBorrado));
 	}
 
 	private void peticionError(Peticion p) throws IOException {

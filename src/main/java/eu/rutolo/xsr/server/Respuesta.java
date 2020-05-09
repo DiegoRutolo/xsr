@@ -37,7 +37,6 @@ public class Respuesta {
 		if (exito) {
 			switch (tipoPet) {
 				case Peticion.GET:
-				case Peticion.DELETE:
 					r.code = 200;
 					r.codeStr = "OK";
 					r.content = content.toString();
@@ -45,6 +44,7 @@ public class Respuesta {
 
 				case Peticion.CREATE:
 				case Peticion.UPDATE:
+				case Peticion.DELETE:
 					r.code = 201;
 					r.codeStr = "Created";
 					r.content = "{}";
