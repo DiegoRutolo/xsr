@@ -209,7 +209,7 @@ public class Operacions {
 		ArrayList<Peza> pezas = new ArrayList<>();
 		try {
 			Statement st = con.createStatement();
-			ResultSet rs = st.executeQuery("SELECT * FROM Cliente");
+			ResultSet rs = st.executeQuery("SELECT * FROM Peza");
 
 			while (rs.next()) {
 				Peza p = new Peza(

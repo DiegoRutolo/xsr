@@ -7,6 +7,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import eu.rutolo.xsr.Main;
@@ -82,75 +83,83 @@ public class Servidor extends Thread {
 
 	private void peticionGet(Peticion p) throws IOException {
 		JSONObject result = new JSONObject();
-		JSONArray arr = new JSONArray();
-		switch (p.getApartado()) {
-			case Peticion.X_CLIENTES:
-				for (Cliente c : op.listClientes()) {
-					arr.put(new JSONObject(c));
-				}
-				result.put("data", arr);
-				break;
-			case Peticion.X_PEZAS:
-				for (Peza peza : op.listPezas()) {
-					arr.put(new JSONObject(peza));
-				}
-				result.put("data", arr);
-				break;
-			case Peticion.X_PEDIDOS:
-				break;
-			case Peticion.X_REPARACIONS:
-				break;
-			default:
-				peticionError(p);
-				return;
+		try {
+			JSONArray arr = new JSONArray();
+			switch (p.getApartado()) {
+				case Peticion.X_CLIENTES:
+					for (Cliente c : op.listClientes()) {
+						arr.put(new JSONObject(c));
+					}
+					result.put("data", arr);
+					break;
+				case Peticion.X_PEZAS:
+					for (Peza peza : op.listPezas()) {
+						arr.put(new JSONObject(peza));
+					}
+					result.put("data", arr);
+					break;
+				case Peticion.X_PEDIDOS:
+					break;
+				case Peticion.X_REPARACIONS:
+					break;
+				default:
+					peticionError(p);
+					return;
+			}
+		} catch (JSONException e) {
+			peticionError(p);
 		}
 
 		enviarRespuesta(Respuesta.getRespuesta(p, result));
 	}
 
 	private void peticionCreate(Peticion p) throws IOException {
-		boolean exito = false;
-		switch (p.getApartado()) {
-			case Peticion.X_CLIENTES:
-				// Crear cliente
-				JSONObject clj = p.getDatos().getJSONObject("cliente");
-				exito = op.addCliente(
-					clj.getString("nome"),
-					clj.getString("tlf"),
-					clj.getString("email"),
-					clj.getString("notas")
-				);
-				if (exito) {
-					Log.i("Creado cliente " + clj.getString("nome"));
-				} else {
-					Log.e("No se pudo crear el cliente " + clj.getString("nome"));
-				}
-				break;
+		try {
+			boolean exito = false;
+			switch (p.getApartado()) {
+				case Peticion.X_CLIENTES:
+					// Crear cliente
+					JSONObject clj = p.getDatos().getJSONObject("cliente");
+					exito = op.addCliente(
+						clj.getString("nome"),
+						clj.getString("tlf"),
+						clj.getString("email"),
+						clj.getString("notas")
+					);
+					if (exito) {
+						Log.i("Creado cliente " + clj.getString("nome"));
+					} else {
+						Log.e("No se pudo crear el cliente " + clj.getString("nome"));
+					}
+					break;
 
-			case Peticion.X_PEZAS:
-				JSONObject pezaJson = p.getDatos().getJSONObject("peza");
-				exito = op.addPeza(
-					pezaJson.getString("codigo"),
-					pezaJson.getString("prov"),
-					pezaJson.getString("nome"),
-					pezaJson.getString("foto"),
-					pezaJson.getInt("cantidade"),
-					pezaJson.getString("notas")
-				);
-				if (exito) {
-					Log.i("Creada peza " + pezaJson.getString("nome"));
-				} else {
-					Log.e("No se pudo crear la pieza " + pezaJson.getString("nome"));
-				}
-				break;
+				case Peticion.X_PEZAS:
+					JSONObject pezaJson = p.getDatos().getJSONObject("peza");
+					exito = op.addPeza(
+						pezaJson.getString("codigo"),
+						pezaJson.getString("prov"),
+						pezaJson.getString("nome"),
+						pezaJson.getString("foto"),
+						pezaJson.getInt("cantidade"),
+						pezaJson.getString("notas")
+					);
+					if (exito) {
+						Log.i("Creada peza " + pezaJson.getString("nome"));
+					} else {
+						Log.e("No se pudo crear la pieza " + pezaJson.getString("nome"));
+					}
+					break;
 
-			case Peticion.X_PEDIDOS:
-				break;
-			case Peticion.X_REPARACIONS:
-				break;
-			default:
-				peticionError(p);
-				return;
+				case Peticion.X_PEDIDOS:
+					break;
+				case Peticion.X_REPARACIONS:
+					break;
+				default:
+					peticionError(p);
+					return;
+			}
+		} catch (JSONException e) {
+			peticionError(p);
 		}
 
 		enviarRespuesta(Respuesta.getRespuesta(p));
@@ -158,121 +167,129 @@ public class Servidor extends Thread {
 
 	private void peticionUpdate(Peticion p) throws IOException {
 		boolean exito = false;
-		int id = 0;
-		switch (p.getApartado()) {
-			case Peticion.X_CLIENTES:
-				id = Integer.parseInt(p.getSelec().getString("id"));
-				Cliente c = op.getCliente(id);
-				// Modificar los datos nuevos en el objeto
-				try {
-					c.setNome(
-						p.getDatos().getString("nome")
-					);
-				} catch (Exception e) {}
+		try {
+			int id = 0;
+			switch (p.getApartado()) {
+				case Peticion.X_CLIENTES:
+					id = Integer.parseInt(p.getSelec().getString("id"));
+					Cliente c = op.getCliente(id);
+					// Modificar los datos nuevos en el objeto
+					try {
+						c.setNome(
+							p.getDatos().getString("nome")
+						);
+					} catch (Exception e) {}
 
-				try {
-					c.setTlf(
-						p.getDatos().getString("tlf")
-					);
-				} catch (Exception e) {}
+					try {
+						c.setTlf(
+							p.getDatos().getString("tlf")
+						);
+					} catch (Exception e) {}
 
-				try {
-					c.setEmail(
-						p.getDatos().getString("email")
-					);
-				} catch (Exception e) {}
+					try {
+						c.setEmail(
+							p.getDatos().getString("email")
+						);
+					} catch (Exception e) {}
 
-				try {
-					c.setNotas(
-						p.getDatos().getString("notas")
-					);
-				} catch (Exception e) {}
+					try {
+						c.setNotas(
+							p.getDatos().getString("notas")
+						);
+					} catch (Exception e) {}
 
-				exito = op.updateCliente(c);
-				break;
+					exito = op.updateCliente(c);
+					break;
 
-			case Peticion.X_PEZAS:
-				id = Integer.parseInt(p.getSelec().getString("id"));
-				Peza peza = op.getPeza(id);
-				try {
-					peza.setCodigo(
-						p.getDatos().getString("codigo")
-					);
-				} catch (Exception e) {}
-				try {
-					peza.setProv(
-						p.getDatos().getString("prov")
-					);
-				} catch (Exception e) {}
-				try {
-					peza.setNome(
-						p.getDatos().getString("nome")
-					);
-				} catch (Exception e) {}
-				try {
-					peza.setFoto(
-						p.getDatos().getString("foto")
-					);
-				} catch (Exception e) {}
-				try {
-					peza.setCantidade(
-						p.getDatos().getInt("cantidade")
-					);
-				} catch (Exception e) {}
-				try {
-					peza.setNotas(
-						p.getDatos().getString("notas")
-					);
-				} catch (Exception e) {}
+				case Peticion.X_PEZAS:
+					id = Integer.parseInt(p.getSelec().getString("id"));
+					Peza peza = op.getPeza(id);
+					try {
+						peza.setCodigo(
+							p.getDatos().getString("codigo")
+						);
+					} catch (Exception e) {}
+					try {
+						peza.setProv(
+							p.getDatos().getString("prov")
+						);
+					} catch (Exception e) {}
+					try {
+						peza.setNome(
+							p.getDatos().getString("nome")
+						);
+					} catch (Exception e) {}
+					try {
+						peza.setFoto(
+							p.getDatos().getString("foto")
+						);
+					} catch (Exception e) {}
+					try {
+						peza.setCantidade(
+							p.getDatos().getInt("cantidade")
+						);
+					} catch (Exception e) {}
+					try {
+						peza.setNotas(
+							p.getDatos().getString("notas")
+						);
+					} catch (Exception e) {}
 
-				exito = op.updatePeza(peza);
-				break;
+					exito = op.updatePeza(peza);
+					break;
 
-			case Peticion.X_PEDIDOS:
-				break;
+				case Peticion.X_PEDIDOS:
+					break;
 
-			case Peticion.X_REPARACIONS:
-				break;
+				case Peticion.X_REPARACIONS:
+					break;
 
-			default:
-				peticionError(p);
-				return;
+				default:
+					peticionError(p);
+					return;
+			}
+		} catch (JSONException e) {
+			peticionError(p);
 		}
 
 		enviarRespuesta(Respuesta.getRespuesta(p.getTipo(), exito));
 	}
 
 	private void peticionDelete(Peticion p) throws IOException {
-		int id = 0;
 		boolean exito = false;
 		JSONObject datoBorrado = new JSONObject();
-		switch (p.getApartado()) {
-			case Peticion.X_CLIENTES:
-				id = Integer.parseInt(p.getSelec().getString("id"));
-				datoBorrado = new JSONObject(op.getCliente(id));
-				exito = op.deleteCliente(id);
-				break;
+		try {
+			int id = 0;
+			switch (p.getApartado()) {
+				case Peticion.X_CLIENTES:
+					id = Integer.parseInt(p.getSelec().getString("id"));
+					datoBorrado = new JSONObject(op.getCliente(id));
+					exito = op.deleteCliente(id);
+					break;
 
-			case Peticion.X_PEZAS:
-				id = Integer.parseInt(p.getSelec().getString("id"));
-				datoBorrado = new JSONObject(op.getPeza(id));
-				exito = op.deletePeza(id);
-				break;
+				case Peticion.X_PEZAS:
+					id = Integer.parseInt(p.getSelec().getString("id"));
+					datoBorrado = new JSONObject(op.getPeza(id));
+					exito = op.deletePeza(id);
+					break;
 
-			case Peticion.X_PEDIDOS:
-				break;
-			case Peticion.X_REPARACIONS:
-				break;
-			default:
-				peticionError(p);
-				return;
+				case Peticion.X_PEDIDOS:
+					break;
+				case Peticion.X_REPARACIONS:
+					break;
+				default:
+					peticionError(p);
+					return;
+			}
+		} catch (JSONException e) {
+			peticionError(p);
 		}
 
 		enviarRespuesta(Respuesta.getRespuesta(p.getTipo(), exito, datoBorrado));
 	}
 
 	private void peticionError(Peticion p) throws IOException {
-		Log.i("Petición errónea");
+		Log.w("Petición errónea");
 		enviarRespuesta(Respuesta.getRespuesta(p.getTipo(), false));
 	}
 
