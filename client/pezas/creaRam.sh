@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Crea unha peza RAM
+# Crea una pieza RAM
 
 IMG='data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAMCAgMCAgMDAgMDAwMDB
 AcFBAQEBAkGBwUHCgkLCwoJCgoMDREODAwQDAoKDhQPEBESExMTCw4UFhQSFhESExL/2wBDAQMDA

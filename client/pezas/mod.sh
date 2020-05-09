@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Elimina el primer cliente
+# Modifica el precio de una pieza
 
 if ! [[ $1 =~ ^[0-9]+$ ]]; then
 	echo "Indica un número"
@@ -13,7 +13,7 @@ ID=$(curl -H "Content-Type: application/json" \
 			"rol": "xerente"
 		},
 		"operacion": {
-			"apartado": "x_clientes",
+			"apartado": "x_pezas",
 			"tipo": "get"
 		}
 	}' \
@@ -28,10 +28,13 @@ curl -v -H "Content-Type: application/json" \
 			"rol": "xerente"
 		},
 		"operacion": {
-			"apartado": "x_clientes",
-			"tipo": "delete",
+			"apartado": "x_pezas",
+			"tipo": "update",
 			"selec": {
 				"id": "'$ID'"
+			},
+			"datos": {
+				"precio": "99.99"
 			}
 		}
 	}' \

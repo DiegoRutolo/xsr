@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Crea unha peza Batería
+# Crea una pieza Batería
 
 IMG='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAV4AAAEHCAIAAABpyLlyAAAgAElEQV
 R4Aex9h3cTx9b472/5znsv2GqrLeouFIfeCR0ChI5Dr4ZQQ+8tIQFC6GCwDS64927JKitpteq2KS

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Muestra todos los clientes
+# Muestra todas las piezas
 
 curl -H "Content-Type: application/json" \
 	-d '{
