@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Crea un cliente de nombre Pepito
+# Crea unha peza RAM
 
 IMG='data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAMCAgMCAgMDAgMDAwMDB
 AcFBAQEBAkGBwUHCgkLCwoJCgoMDREODAwQDAoKDhQPEBESExMTCw4UFhQSFhESExL/2wBDAQMDA
@@ -1208,6 +1208,7 @@ JSON='{
 					"prov": "PCcomponentes",
 					"nome": "DDR4 2400 PC4-19200 8GB",
 					"foto": "",
+					"precio": "36.99",
 					"cantidade": "1",
 					"notas": "https://www.pccomponentes.com/crucial-ddr4-2400-pc4-19200-8gb-cl17"
 				}
