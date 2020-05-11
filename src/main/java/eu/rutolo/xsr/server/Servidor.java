@@ -226,6 +226,11 @@ public class Servidor extends Thread {
 						);
 					} catch (Exception e) {}
 					try {
+						peza.setPrecio(
+							p.getDatos().getString("precio")
+						);
+					} catch (Exception e) {}
+					try {
 						peza.setCantidade(
 							p.getDatos().getInt("cantidade")
 						);

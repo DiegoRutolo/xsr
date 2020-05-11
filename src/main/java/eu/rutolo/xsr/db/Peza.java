@@ -68,6 +68,10 @@ public class Peza {
 		return this.precio;
 	}
 
+	public void setPrecio(String precio) {
+		this.precio = new BigDecimal(precio);
+	}
+
 	public void setPrecio(BigDecimal precio) {
 		this.precio = precio;
 	}
