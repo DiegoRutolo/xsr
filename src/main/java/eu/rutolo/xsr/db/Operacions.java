@@ -332,4 +332,113 @@ public class Operacions {
 		}
 	}
 	//#endregion
+
+	//#region Pedido
+	public ArrayList<Pedido> listPedidos() {
+		ArrayList<Pedido> pedidos = new ArrayList<>();
+		try {
+			Statement st = con.createStatement();
+			ResultSet rs = st.executeQuery("SELECT * FROM Pedido");
+
+			while (rs.next()) {
+				Pedido p = new Pedido(
+						rs.getInt("cliente_id"),
+						rs.getInt("peza_id"),
+						rs.getBigDecimal("pvp"),
+						rs.getString("estado")
+					);
+				pedidos.add(p);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return pedidos;
+	}
+
+	public Pedido getPedido(int idCliente, int idPeza) {
+		Pedido pedido = null;
+		try {
+			PreparedStatement ps = con.prepareStatement("SELECT * FROM Pedido WHERE client_id = ?, peza_id = ?");
+			ps.setInt(1, idCliente);
+			ps.setInt(2, idPeza);
+			ResultSet rs = ps.executeQuery();
+
+			if (rs.next()) {
+				pedido = new Pedido(
+					rs.getInt("cliente_id"),
+					rs.getInt("peza_id"),
+					rs.getBigDecimal("pvp"),
+					rs.getString("estado")
+				);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return pedido;
+	}
+
+	public boolean addPedido(int idCliente, int idPeza, String pvp, String estado) {
+		return addPedido(new Pedido(idCliente, idPeza, pvp, estado));
+	}
+
+	public boolean addPedido(Pedido pedido) {
+		try {
+			PreparedStatement ps = con.prepareStatement(
+					"INSERT INTO Pedido (client_id, peza_id, pvp, estado) " + 
+					"VALUES (?, ?, ?, ?)"
+				);
+			ps.setInt(1, pedido.getIdCliente());
+			ps.setInt(2, pedido.getIdPeza());
+			ps.setBigDecimal(3, pedido.getPvp());
+			ps.setString(4, pedido.getEstado());
+
+			return ps.executeUpdate() == 1 ? true : false;
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
+	}
+
+	public boolean updatePedido(Pedido pedido) {
+		try {
+			PreparedStatement ps = con.prepareStatement(
+					"UPDATE Peza " +
+					"SET pvp = ?, estado = ? " +
+					"WHERE client_id = ? AND peza_id = ?"
+				);
+			ps.setBigDecimal(1, pedido.getPvp());
+			ps.setString(2, pedido.getEstado());
+			ps.setInt(3, pedido.getIdCliente());
+			ps.setInt(4, pedido.getIdPeza());
+
+			return ps.executeUpdate() == 1 ? true : false;
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
+	}
+
+	public boolean deletePedido(int idCliente, int idPeza) {
+		try {
+			PreparedStatement ps = con.prepareStatement(
+				"DELETE FROM Pedido WHERE client_id = ? AND peza_id = ?"
+			);
+			ps.setInt(1, idCliente);
+			ps.setInt(2, idPeza);
+
+			return ps.executeUpdate() == 1 ? true : false;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
+	}
+	//#endregion
 }
