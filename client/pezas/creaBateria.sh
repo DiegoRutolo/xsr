@@ -1840,7 +1840,7 @@ JSON='{
 					"prov": "Impextrom",
 					"nome": "Batería Samsun Galaxy",
 					"foto": "",
-					"precio": "9.46"
+					"precio": "9.46",
 					"cantidade": "3",
 					"notas": "Galaxy J5, J500, G531F Galaxy Grand Prime VE / Galaxy J3 (2016), J320.\n https://www.impextrom.com/es/bateria-para-samsung-galaxy-j5-j500-g531f-galaxy-grand-prime-ve-galaxy-j3-2016-j320-p1000000257"
 				}
