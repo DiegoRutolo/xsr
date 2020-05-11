@@ -1,26 +1,22 @@
 #!/usr/bin/env bash
 
-# Modifica el teléfono del primer cliente
+# Modifica el estado de un pedido
 
-if ! [[ $1 =~ ^[0-9]+$ ]]; then
+if [[ $# -lt 2 ]]; then
+	echo "Uso: crea.sh ID_CLIENTE ID_PEZA [ESTADO]"
+	echo
+	exit
+fi
+
+if ! [[ $1 =~ ^-*[0-9]+$ ]]; then
 	echo "Indica un número"
 	exit 1
 fi
 
-ID=$(curl -H "Content-Type: application/json" \
-	-d '{
-		"usuario": {
-			"rol": "xerente"
-		},
-		"operacion": {
-			"apartado": "x_clientes",
-			"tipo": "get"
-		}
-	}' \
-	localhost:10097 | \
-jq -r '.data['$1'].id')
-
-echo Cambiando $ID
+if ! [[ $2 =~ ^-*[0-9]+$ ]]; then
+	echo "Indica un número"
+	exit 1
+fi
 
 curl -v -H "Content-Type: application/json" \
 	-d '{
@@ -28,13 +24,14 @@ curl -v -H "Content-Type: application/json" \
 			"rol": "xerente"
 		},
 		"operacion": {
-			"apartado": "x_clientes",
+			"apartado": "x_pedidos",
 			"tipo": "update",
 			"selec": {
-				"id": "'$ID'"
+				"idCliente": "'$1'",
+				"idPeza": "'$2'"
 			},
 			"datos": {
-				"tlf": "+27888888888"
+				"estado": "'$3'"
 			}
 		}
 	}' \

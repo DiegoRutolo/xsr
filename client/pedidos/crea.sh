@@ -19,7 +19,7 @@ if ! [[ $2 =~ ^[0-9]+$ ]]; then
 	exit 1
 fi
 
-if ! [[ $3 =~ ^[0-9]+$ ]]; then
+if ! [[ $3 =~ ^[0-9]+\.*[0-9]*$ ]]; then
 	echo "El precio debe ser un número"
 	exit 1
 fi
