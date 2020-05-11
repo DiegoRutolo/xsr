@@ -2,6 +2,13 @@
 
 # Modifica el precio de una pieza
 
+if [[ $# -eq 0 ]]; then
+	echo "Uso: mod.sh N_PIEZA"
+	echo
+	echo "0 sería la primera, 1 la segunda, etc..."
+	exit
+fi
+
 if ! [[ $1 =~ ^[0-9]+$ ]]; then
 	echo "Indica un número"
 	exit 1
