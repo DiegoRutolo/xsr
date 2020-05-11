@@ -2,6 +2,13 @@
 
 # Elimina una pieza
 
+if [[ $# -eq 0 ]]; then
+	echo "Uso: delete.sh N_PIEZA"
+	echo
+	echo "0 sería el primero, 1 el segundo, etc..."
+	exit
+fi
+
 if ! [[ $1 =~ ^[0-9]+$ ]]; then
 	echo "Indica un número"
 	exit 1

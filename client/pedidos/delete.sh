@@ -1,13 +1,6 @@
 #!/usr/bin/env bash
 
-# Modifica el precio de una pieza
-
-if [[ $# -eq 0 ]]; then
-	echo "Uso: mod.sh N_PIEZA"
-	echo
-	echo "0 sería la primera, 1 la segunda, etc..."
-	exit
-fi
+# Elimina un pedido
 
 if ! [[ $1 =~ ^[0-9]+$ ]]; then
 	echo "Indica un número"
@@ -20,7 +13,7 @@ ID=$(curl -H "Content-Type: application/json" \
 			"rol": "xerente"
 		},
 		"operacion": {
-			"apartado": "x_pezas",
+			"apartado": "x_clientes",
 			"tipo": "get"
 		}
 	}' \
@@ -35,13 +28,10 @@ curl -v -H "Content-Type: application/json" \
 			"rol": "xerente"
 		},
 		"operacion": {
-			"apartado": "x_pezas",
-			"tipo": "update",
+			"apartado": "x_clientes",
+			"tipo": "delete",
 			"selec": {
 				"id": "'$ID'"
-			},
-			"datos": {
-				"precio": "99.99"
 			}
 		}
 	}' \

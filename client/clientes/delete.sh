@@ -2,6 +2,13 @@
 
 # Elimina un cliente
 
+if [[ $# -eq 0 ]]; then
+	echo "Uso: del.sh N_CLIENTE"
+	echo
+	echo "0 sería el primero, 1 el segundo, etc..."
+	exit
+fi
+
 if ! [[ $1 =~ ^[0-9]+$ ]]; then
 	echo "Indica un número"
 	exit 1
