@@ -342,7 +342,7 @@ public class Operacions {
 
 			while (rs.next()) {
 				Pedido p = new Pedido(
-						rs.getInt("cliente_id"),
+						rs.getInt("client_id"),
 						rs.getInt("peza_id"),
 						rs.getBigDecimal("pvp"),
 						rs.getString("estado")
@@ -360,14 +360,17 @@ public class Operacions {
 	public Pedido getPedido(int idCliente, int idPeza) {
 		Pedido pedido = null;
 		try {
-			PreparedStatement ps = con.prepareStatement("SELECT * FROM Pedido WHERE client_id = ?, peza_id = ?");
+			PreparedStatement ps = con.prepareStatement("SELECT * "+
+				"FROM Pedido "+
+				"WHERE client_id = ? AND peza_id = ?"
+			);
 			ps.setInt(1, idCliente);
 			ps.setInt(2, idPeza);
 			ResultSet rs = ps.executeQuery();
 
 			if (rs.next()) {
 				pedido = new Pedido(
-					rs.getInt("cliente_id"),
+					rs.getInt("client_id"),
 					rs.getInt("peza_id"),
 					rs.getBigDecimal("pvp"),
 					rs.getString("estado")
@@ -407,7 +410,7 @@ public class Operacions {
 	public boolean updatePedido(Pedido pedido) {
 		try {
 			PreparedStatement ps = con.prepareStatement(
-					"UPDATE Peza " +
+					"UPDATE Pedido " +
 					"SET pvp = ?, estado = ? " +
 					"WHERE client_id = ? AND peza_id = ?"
 				);

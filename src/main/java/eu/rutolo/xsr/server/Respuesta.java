@@ -64,6 +64,26 @@ public class Respuesta {
 		return r;
 	}
 
+	public static Respuesta getRespuesta404() {
+		Respuesta r = new Respuesta();
+		r.code = 400;
+		r.codeStr = "Bad Request";
+		r.content = "";
+		r.contentLength = 0;
+
+		return r;
+	}
+
+	public static Respuesta getRespuesta404(JSONObject content) {
+		Respuesta r = new Respuesta();
+		r.code = 400;
+		r.codeStr = "Bad Request";
+		r.content = content.toString();
+		r.contentLength = r.content.getBytes().length;
+
+		return r;
+	}
+
 	public String[] getHeaders() {
 		ArrayList<String> sb = new ArrayList<>();
 		

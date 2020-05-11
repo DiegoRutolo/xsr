@@ -14,6 +14,7 @@ import eu.rutolo.xsr.Main;
 import eu.rutolo.xsr.data.Log;
 import eu.rutolo.xsr.db.Cliente;
 import eu.rutolo.xsr.db.Operacions;
+import eu.rutolo.xsr.db.Pedido;
 import eu.rutolo.xsr.db.Peza;
 
 public class Servidor extends Thread {
@@ -87,18 +88,19 @@ public class Servidor extends Thread {
 			JSONArray arr = new JSONArray();
 			switch (p.getApartado()) {
 				case Peticion.X_CLIENTES:
-					for (Cliente c : op.listClientes()) {
-						arr.put(new JSONObject(c));
+					for (Cliente cliente : op.listClientes()) {
+						arr.put(new JSONObject(cliente));
 					}
-					result.put("data", arr);
 					break;
 				case Peticion.X_PEZAS:
 					for (Peza peza : op.listPezas()) {
 						arr.put(new JSONObject(peza));
 					}
-					result.put("data", arr);
 					break;
 				case Peticion.X_PEDIDOS:
+					for (Pedido pedido : op.listPedidos()) {
+						arr.put(new JSONObject(pedido));
+					}
 					break;
 				case Peticion.X_REPARACIONS:
 					break;
@@ -106,6 +108,7 @@ public class Servidor extends Thread {
 					peticionError(p);
 					return;
 			}
+			result.put("data", arr);
 		} catch (JSONException e) {
 			peticionError(p);
 		}
@@ -114,8 +117,10 @@ public class Servidor extends Thread {
 	}
 
 	private void peticionCreate(Peticion p) throws IOException {
+		Respuesta respuesta = null;
 		try {
 			boolean exito = false;
+			boolean flag404 = false;
 			switch (p.getApartado()) {
 				case Peticion.X_CLIENTES:
 					// Crear cliente
@@ -152,6 +157,32 @@ public class Servidor extends Thread {
 					break;
 
 				case Peticion.X_PEDIDOS:
+					JSONObject pedidoJson = p.getDatos().getJSONObject("pedido");
+					int idCliente = Integer.parseInt(pedidoJson.getString("idCliente"));
+					int idPeza = Integer.parseInt(pedidoJson.getString("idPeza"));
+
+					if (op.getCliente(idCliente) == null) {
+						JSONObject contenido404 = new JSONObject();
+						contenido404.put("obj", "cliente");
+						contenido404.put("id", idCliente);
+
+						respuesta = Respuesta.getRespuesta404(contenido404);
+						flag404 = true;
+					} else if (op.getPeza(idPeza) == null) {
+						JSONObject contenido404 = new JSONObject();
+						contenido404.put("obj", "peza");
+						contenido404.put("id", idCliente);
+
+						respuesta = Respuesta.getRespuesta404(contenido404);
+						flag404 = true;
+					} else {
+						exito = op.addPedido(
+							idCliente,
+							idPeza,
+							pedidoJson.getString("pvp"),
+							pedidoJson.getString("estado")
+						);
+					}
 					break;
 				case Peticion.X_REPARACIONS:
 					break;
@@ -159,11 +190,15 @@ public class Servidor extends Thread {
 					peticionError(p);
 					return;
 			}
+
+			if (!flag404) {
+				respuesta = Respuesta.getRespuesta(p);
+			}
 		} catch (JSONException e) {
 			peticionError(p);
 		}
 
-		enviarRespuesta(Respuesta.getRespuesta(p));
+		enviarRespuesta(respuesta);
 	}
 
 	private void peticionUpdate(Peticion p) throws IOException {
@@ -245,6 +280,22 @@ public class Servidor extends Thread {
 					break;
 
 				case Peticion.X_PEDIDOS:
+					int idCliente = Integer.parseInt(p.getSelec().getString("idCliente"));
+					int idPeza = Integer.parseInt(p.getSelec().getString("idPeza"));
+					
+					Pedido pedido = op.getPedido(idCliente, idPeza);
+					try {
+						pedido.setPvp(
+							p.getDatos().getString("pvp")
+						);
+					} catch (Exception e) {}
+					try {
+						pedido.setEstado(
+							p.getDatos().getString("estado")
+						);
+					} catch (Exception e) {}
+
+					exito = op.updatePedido(pedido);
 					break;
 
 				case Peticion.X_REPARACIONS:
@@ -280,6 +331,9 @@ public class Servidor extends Thread {
 					break;
 
 				case Peticion.X_PEDIDOS:
+					int idCliente = Integer.parseInt(p.getSelec().getString("idCliente"));
+					int idPeza = Integer.parseInt(p.getSelec().getString("idPeza"));
+					exito = op.deletePedido(idCliente, idPeza);
 					break;
 				case Peticion.X_REPARACIONS:
 					break;
