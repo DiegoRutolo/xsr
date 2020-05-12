@@ -1,5 +1,6 @@
 package eu.rutolo.xsr.db;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -24,8 +25,8 @@ public class Operacions {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 		} catch (final ClassNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			System.exit(1);
 		}
 
 		final String url = "jdbc:mysql://" + Main.conf.getDBHost() + ":" + Main.conf.getDBPort() + "/"
@@ -95,7 +96,7 @@ public class Operacions {
 			ps.setInt(1, id);
 			ResultSet rs = ps.executeQuery();
 
-			if (rs.first()) {
+			if (rs.next()) {
 				c = new Cliente(
 						rs.getInt("id"),
 						rs.getString("nome"),
@@ -194,6 +195,246 @@ public class Operacions {
 				"DELETE FROM Cliente WHERE id = ?"
 			);
 			ps.setInt(1, id);
+
+			return ps.executeUpdate() == 1 ? true : false;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
+	}
+	//#endregion
+
+	//#region Peza
+	public ArrayList<Peza> listPezas() {
+		ArrayList<Peza> pezas = new ArrayList<>();
+		try {
+			Statement st = con.createStatement();
+			ResultSet rs = st.executeQuery("SELECT * FROM Peza");
+
+			while (rs.next()) {
+				Peza p = new Peza(
+						rs.getInt("id"),
+						rs.getString("codigo"),
+						rs.getString("prov"),
+						rs.getString("nome"),
+						rs.getString("foto"),
+						rs.getBigDecimal("precio"),
+						rs.getInt("cantidade"),
+						rs.getString("notas")
+					);
+				pezas.add(p);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return pezas;
+	}
+
+	public Peza getPeza(int id) {
+		Peza p = null;
+		try {
+			PreparedStatement ps = con.prepareStatement("SELECT * FROM Peza WHERE id = ?");
+			ps.setInt(1, id);
+			ResultSet rs = ps.executeQuery();
+
+			if (rs.next()) {
+				p = new Peza(
+					rs.getInt("id"),
+					rs.getString("codigo"),
+					rs.getString("prov"),
+					rs.getString("nome"),
+					rs.getString("foto"),
+					rs.getBigDecimal("precio"),
+					rs.getInt("cantidade"),
+					rs.getString("notas")
+				);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return p;
+	}
+
+	public boolean addPeza(String codigo, String prov, String nome, String foto, BigDecimal precio, int cantidade, String notas) {
+		int id = 0;
+		do {
+			id = rnd.nextInt();
+		} while (getCliente(id) != null);
+		
+		return addPeza(new Peza(id, codigo, prov, nome, foto, precio, cantidade, notas));
+	}
+
+	public boolean addPeza(Peza p) {
+		try {
+			PreparedStatement ps = con.prepareStatement(
+					"INSERT INTO Peza (id, codigo, prov, nome, foto, precio, cantidade, notas) " + 
+					"VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
+				);
+			ps.setInt(1, p.getId());
+			ps.setString(2, p.getCodigo());
+			ps.setString(3, p.getProv());
+			ps.setString(4, p.getNome());
+			ps.setString(5, p.getFoto());
+			ps.setString(6, p.getPrecio().toString());
+			ps.setInt(7, p.getCantidade());
+			ps.setString(8, p.getNotas());
+
+			return ps.executeUpdate() == 1 ? true : false;
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
+	}
+
+	public boolean updatePeza(Peza p) {
+		try {
+			PreparedStatement ps = con.prepareStatement(
+					"UPDATE Peza " +
+					"SET codigo = ?, prov = ?, nome = ?, foto = ?, precio = ?, cantidade = ?, notas = ? " +
+					"WHERE id = ?"
+				);
+			ps.setString(1, p.getCodigo());
+			ps.setString(2, p.getProv());
+			ps.setString(3, p.getNome());
+			ps.setString(4, p.getFoto());
+			ps.setString(5, p.getPrecio().toString());
+			ps.setInt(6, p.getCantidade());
+			ps.setString(7, p.getNotas());
+			ps.setInt(8, p.getId());
+
+			return ps.executeUpdate() == 1 ? true : false;
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
+	}
+
+	public boolean deletePeza(int id) {
+		try {
+			PreparedStatement ps = con.prepareStatement(
+				"DELETE FROM Peza WHERE id = ?"
+			);
+			ps.setInt(1, id);
+
+			return ps.executeUpdate() == 1 ? true : false;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
+	}
+	//#endregion
+
+	//#region Pedido
+	public ArrayList<Pedido> listPedidos() {
+		ArrayList<Pedido> pedidos = new ArrayList<>();
+		try {
+			Statement st = con.createStatement();
+			ResultSet rs = st.executeQuery("SELECT * FROM Pedido");
+
+			while (rs.next()) {
+				Pedido p = new Pedido(
+						rs.getInt("client_id"),
+						rs.getInt("peza_id"),
+						rs.getBigDecimal("pvp"),
+						rs.getString("estado")
+					);
+				pedidos.add(p);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return pedidos;
+	}
+
+	public Pedido getPedido(int idCliente, int idPeza) {
+		Pedido pedido = null;
+		try {
+			PreparedStatement ps = con.prepareStatement("SELECT * "+
+				"FROM Pedido "+
+				"WHERE client_id = ? AND peza_id = ?"
+			);
+			ps.setInt(1, idCliente);
+			ps.setInt(2, idPeza);
+			ResultSet rs = ps.executeQuery();
+
+			if (rs.next()) {
+				pedido = new Pedido(
+					rs.getInt("client_id"),
+					rs.getInt("peza_id"),
+					rs.getBigDecimal("pvp"),
+					rs.getString("estado")
+				);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return pedido;
+	}
+
+	public boolean addPedido(int idCliente, int idPeza, String pvp, String estado) {
+		return addPedido(new Pedido(idCliente, idPeza, pvp, estado));
+	}
+
+	public boolean addPedido(Pedido pedido) {
+		try {
+			PreparedStatement ps = con.prepareStatement(
+					"INSERT INTO Pedido (client_id, peza_id, pvp, estado) " + 
+					"VALUES (?, ?, ?, ?)"
+				);
+			ps.setInt(1, pedido.getIdCliente());
+			ps.setInt(2, pedido.getIdPeza());
+			ps.setBigDecimal(3, pedido.getPvp());
+			ps.setString(4, pedido.getEstado());
+
+			return ps.executeUpdate() == 1 ? true : false;
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
+	}
+
+	public boolean updatePedido(Pedido pedido) {
+		try {
+			PreparedStatement ps = con.prepareStatement(
+					"UPDATE Pedido " +
+					"SET pvp = ?, estado = ? " +
+					"WHERE client_id = ? AND peza_id = ?"
+				);
+			ps.setBigDecimal(1, pedido.getPvp());
+			ps.setString(2, pedido.getEstado());
+			ps.setInt(3, pedido.getIdCliente());
+			ps.setInt(4, pedido.getIdPeza());
+
+			return ps.executeUpdate() == 1 ? true : false;
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
+	}
+
+	public boolean deletePedido(int idCliente, int idPeza) {
+		try {
+			PreparedStatement ps = con.prepareStatement(
+				"DELETE FROM Pedido WHERE client_id = ? AND peza_id = ?"
+			);
+			ps.setInt(1, idCliente);
+			ps.setInt(2, idPeza);
 
 			return ps.executeUpdate() == 1 ? true : false;
 		} catch (SQLException e) {

@@ -7,7 +7,7 @@ import java.util.Properties;
 public class Config {
 
 	public static final String CONF_FILE = "/etc/xsrd.conf";
-	public static final int DEFAULT_LOG_LEVEL = 4;
+	public static final int DEFAULT_LOG_LEVEL = 3;
 
 	private Properties prop;
 
