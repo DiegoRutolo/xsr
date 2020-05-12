@@ -87,7 +87,7 @@ Tamén hai traduccións [*non oficiais*](https://www.gnu.org/licenses/translatio
 3. [Análise](doc/3_analise.md)
 4. [Deseño](doc/4_deseno.md)
 5. [Planificación](doc/5_planificacion.md)
-6. [Implantación](doc/templates/6_implantacion.md)
+6. [Implantación](doc/6_implantacion.md)
 
 
 ## Guía de contribución
