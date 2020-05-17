@@ -18,6 +18,30 @@ public class Reparacion {
 	private int[] idsPezas;
 
 	public Reparacion(
+		Date ini, Date fin, int nHoras,
+		boolean completa, String causa, String solucion, 
+		BigDecimal pvp, String notas, int idCliente
+	){
+		this(
+			0, ini, fin, nHoras, completa,
+			causa, solucion, pvp,
+			notas, idCliente, new int[0]
+		);
+	}
+
+	public Reparacion(
+		int id, Date ini, Date fin, int nHoras,
+		boolean completa, String causa, String solucion, 
+		BigDecimal pvp, String notas, int idCliente
+	){
+		this(
+			id, ini, fin, nHoras, completa,
+			causa, solucion, pvp,
+			notas, idCliente, new int[0]
+		);
+	}
+
+	public Reparacion(
 		int id, Date ini, Date fin, int nHoras,
 		boolean completa, String causa, String solucion, 
 		BigDecimal pvp, String notas, int idCliente,
@@ -39,6 +63,10 @@ public class Reparacion {
 	//#region Getters y setters
 	public int getId() {
 		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 	
 	public Date getIni() {
