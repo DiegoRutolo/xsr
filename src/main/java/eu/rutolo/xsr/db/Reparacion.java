@@ -1,7 +1,6 @@
 package eu.rutolo.xsr.db;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Date;
 
 public class Reparacion {
