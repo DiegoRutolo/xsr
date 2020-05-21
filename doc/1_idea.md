@@ -4,9 +4,9 @@
 
 O proxecto consiste nun sistema de xestión para un taller. Serve para gardar un rexistro dos clientes, as pezas que piden e os servizos prestados.
 
-A aplicación utiliza a arquitectura Servidor-Cliente. O servidor é unha aplicación en Java dentro dun contenedor (probablemente Docker) e unha API para comunicarse cos clientes.
+A aplicación utiliza a arquitectura Servidor-Cliente. O servidor é unha aplicación en Java dentro dun contenedor Docker e unha API para comunicarse cos clientes.
 
-Os clientes poden ser APPs Android, webapps multiplataforma feitas con Electron ou simples scripts para CLI. O importante é que só interactúan con servidor mediate a API, de forma que é moi facil programarlas de forma independiente.
+Os clientes poden ser APPs Android, webapps multiplataforma feitas con Electron ou simples scripts para CLI. O importante é que **só interactúan con servidor mediate a API**, de forma que é moi facil programarlas independentemente.
 
 O proxecto céntrase na documentación e desenvolvemento do servidor e definir os protocolos de comunicación.
 

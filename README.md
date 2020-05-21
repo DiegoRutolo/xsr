@@ -10,6 +10,8 @@ Este repositorio contén a documentación do servidor e as especificacións da c
 
 ## Instalación / Posta en marcha
 
+> Para ver toda a infomación sobre a instalación, revisa o [documento de implantación](doc/6_implantacion.md).
+
 XSR é unha aplicación basada en [Docker](https://www.docker.com/), polo que a instalación é bastante sinxela.
 
 Proporcionase un script que utiliza [Maven](https://maven.apache.org/) para compilar, executar os tests e empaquetar. A continuación lanza 2 contenedores (base de datos e servidor) e conecta a rede e os arquivos de configuración. 
@@ -89,6 +91,11 @@ Tamén hai traduccións [*non oficiais*](https://www.gnu.org/licenses/translatio
 5. [Planificación](doc/5_planificacion.md)
 6. [Implantación](doc/6_implantacion.md)
 
+## Probas
+
+O mecanismo principal de probas é mediante os scripts que simulan un cliente.
+
+O desenvolvemento destes scripts relízanse na branch *test-client* e pódese atopar no directorio [client](client). Éste directorio contén un [README](client/README.md) con información mais detallada.
 
 ## Guía de contribución
 
