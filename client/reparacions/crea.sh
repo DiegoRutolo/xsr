@@ -28,12 +28,13 @@ curl -v -H "Content-Type: application/json" \
 			"tipo": "create",
 			"datos": {
 				"reparacion": {
-					"ini": "",
-					"fin": "",
+					"ini": "2019-08-03",
+					"fin": "2019-08-09",
 					"n_horas": "2",
 					"completa": "false",
 					"causa": "Peza rota",
 					"solucion": "Cambiar peza",
+					"pvp": "34.09",
 					"notas": "",
 					"id_cliente": "'$1'",
 					"ids_pezas": [

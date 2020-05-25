@@ -25,7 +25,7 @@ curl -v -H "Content-Type: application/json" \
 				"id": "'$ID'"
 			},
 			"datos": {
-				"notas": "'$2'"
+				"notas": "'"$2"'"
 			}
 		}
 	}' \
