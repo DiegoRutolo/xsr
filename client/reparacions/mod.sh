@@ -22,7 +22,7 @@ curl -v -H "Content-Type: application/json" \
 			"apartado": "x_reparacions",
 			"tipo": "update",
 			"selec": {
-				"id": "'$ID'"
+				"id": "'$1'"
 			},
 			"datos": {
 				"notas": "'"$2"'"

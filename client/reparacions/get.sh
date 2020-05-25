@@ -8,7 +8,7 @@ curl -H "Content-Type: application/json" \
 			"rol": "xerente"
 		},
 		"operacion": {
-			"apartado": "x_clientes",
+			"apartado": "x_reparacions",
 			"tipo": "get"
 		}
 	}' \
