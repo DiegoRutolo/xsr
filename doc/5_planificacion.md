@@ -12,20 +12,19 @@ Pódense indicar os recursos materiais e humanos asociados a cada tarefa ou, se 
 
 > **Recursos**: Os recursos son exactamente os mesmos para todas as fases: 1 programador (eu), 1 PC (Ubuntu) e unha conexión a internet.
 
-### Fase 1: Estudo de necesidades e modelo de negocio
+### Fase 1: Deseño, estudo de necesidades e modelo de negocio
 
-#### Tarefa 1: xxxxxxxx
+**Duración da fase**: 7 días
 
-Descrición: 
+**Obxetivo**: Preparar toda a documentación e deseño do software para axilizar a implementación.
 
-Recursos hardware/software: 
+#### Tarefa 1: Funcionamento
 
-Recursos humanos: Persoas que se encargarán de realizar esta tarefa
+**Descrición**: Decidir as funcionalidades e requerimentos (MySQL, Docker, estructura cliente-servidor)
 
-Duración: 
+#### Tarefa 2: Estructura
 
-#### Tarefa 2
-...
+**Descrición**: Decidir a estructura de clases e do servidor.
 
 -------------------------------
 
@@ -133,6 +132,24 @@ Algunhas destas clases son:
 
 ----------------------
 
+### Fase 8: Roles
+
+**Duración**: 5 días
+
+**Descrición**: Implementación do sistema de roles para controlar os permisos das operacións
+
+**Obxetivos**: Un sistema que permita configurar que clientes poden realizar diversas operacións.
+
+#### Tarefa 1: Config files
+
+**Descrición**: Decidir a estructura dos ficheiros que defines os roles e os seus permisos
+
+#### Tarefa 2: Implementación
+
+**Descrición**: Escribir o código que comproba os permisos do cliente.
+
+----------------------
+
 ## Diagrama de Gantt
 
 ![Diagrama de Gantt](img/xsr_Gantt.png)
@@ -153,14 +170,15 @@ Con estes cálculos saen 4.8 kWh/día -> 0,356112 €/día
 
 | ACTIVIDADE	| DURACIÓN	| CUSTO (€)	|
 | :--:			| --		| --:		|
-| Fase 2		| 5 días	| 451.75	|
-| Fase 3		| 4 dáis	| 361.44	|
-| Fase 4		| 2 días	| 180.72	|
-| Fase 5		| 2 días	| 180.72	|
-| Fase 6		| 3 días	| 271.08	|
-| Fase 7		| 6 días	| 542.16	|
+| Fase 1		| 7 dáis	| 632,52	|
+| Fase 2		| 5 días	| 451,75	|
+| Fase 3		| 4 dáis	| 361,44	|
+| Fase 4		| 2 días	| 180,72	|
+| Fase 5		| 2 días	| 180,72	|
+| Fase 6		| 3 días	| 271,08	|
+| Fase 7		| 6 días	| 542,16	|
 |				|			|			|
-|				| TOTAL		| 1987.87	|
+|				| TOTAL		| 2620,39	|
 
 ## WEBGRAFÍA
  * Convenio colectivo estatal de empresas de consultoría y estudios
