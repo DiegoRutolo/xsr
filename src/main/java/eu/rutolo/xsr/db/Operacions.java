@@ -444,4 +444,232 @@ public class Operacions {
 		}
 	}
 	//#endregion
+
+	// #region Cliente
+	/**
+	 * Devuelve una lista de todas las reparaciones.
+	 * @return Lista de objetos Reparacion
+	 */
+	public ArrayList<Reparacion> listReparaciones() {
+		ArrayList<Reparacion> reparaciones = new ArrayList<>();
+		try {
+			Statement st = con.createStatement();
+			ResultSet rs = st.executeQuery("SELECT * FROM Reparacion");
+
+			while (rs.next()) {
+				Reparacion rep = new Reparacion(
+						rs.getInt("id"),
+						rs.getDate("ini"),
+						rs.getDate("fin"),
+						rs.getInt("n_horas"),
+						rs.getBoolean("completa"),
+						rs.getString("causa"),
+						rs.getString("solucion"),
+						rs.getBigDecimal("pvp"),
+						rs.getString("notas"),
+						rs.getInt("client_id")
+					);
+				PreparedStatement ps = con.prepareStatement(
+					"SELECT * " + 
+					"FRROM PezasReparacion " + 
+					"WHERE reparacion_id = ?"
+				);
+				ps.setInt(1, rep.getId());
+				ResultSet rs0 = ps.executeQuery();
+				while (rs0.next()) {
+					rep.addIdPeza(rs0.getInt("peza_id"));
+				}
+				reparaciones.add(rep);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return reparaciones;
+	}
+
+	/**
+	 * Devuelve la reparacion con id especificada
+	 * @param id	Id de la reparacion
+	 * @return		Objeto Reparacion
+	 */
+	public Reparacion getReparacion(int id) {
+		Reparacion rep = null;
+		try {
+			PreparedStatement ps = con.prepareStatement(
+				"SELECT * FROM Reparacion WHERE id = ?"
+			);
+			ps.setInt(1, id);
+			ResultSet rs = ps.executeQuery();
+
+			if (rs.next()) {
+				rep = new Reparacion(
+						rs.getInt("id"),
+						rs.getDate("ini"),
+						rs.getDate("fin"),
+						rs.getInt("n_horas"),
+						rs.getBoolean("completa"),
+						rs.getString("causa"),
+						rs.getString("solucion"),
+						rs.getBigDecimal("pvp"),
+						rs.getString("notas"),
+						rs.getInt("client_id")
+					);
+				PreparedStatement ps0 = con.prepareStatement(
+					"SELECT * " + 
+					"FRROM PezasReparacion " + 
+					"WHERE reparacion_id = ?"
+				);
+				ps0.setInt(1, rep.getId());
+				ResultSet rs0 = ps0.executeQuery();
+				while (rs0.next()) {
+					rep.addIdPeza(rs0.getInt("peza_id"));
+				}
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return rep;
+	}
+
+	/**
+	 * Crea una nueva reparacion
+	 * 
+	 * @param rep	Objeto Reparacion
+	 * @return		Verdadero en caso de éxito, falso en caso de fallo.
+	 */
+	public boolean addReparacion(Reparacion rep) {
+		// si ID == 0, ponemos uno aleatorio
+		if (rep.getId() == 0) {
+			int id = 0;
+			do {
+				id = rnd.nextInt();
+			} while (getReparacion(id) != null);
+			rep.setId(id);
+		}
+
+		try {
+			PreparedStatement ps = con.prepareStatement(
+					"INSERT INTO Reparacion (" +
+						"id, ini, fin, n_horas, completa," +
+						"causa, solucion, pvp, notas, client_id) " + 
+					"VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+				);
+			ps.setInt(1, rep.getId());
+			ps.setDate(2, new java.sql.Date(rep.getIni().getTime()));
+			ps.setDate(3, new java.sql.Date(rep.getFin().getTime()));
+			ps.setInt(4, rep.getNhoras());
+			ps.setBoolean(5, rep.isCompleta());
+			ps.setString(6, rep.getCausa());
+			ps.setString(7, rep.getSolucion());
+			ps.setBigDecimal(8, rep.getPvp());
+			ps.setString(9, rep.getNotas());
+			ps.setInt(10, rep.getIdCliente());
+
+			boolean f1 = ps.executeUpdate() == 1 ? true : false;
+
+			for (int idPeza : rep.getIdsPezas()) {
+				f1 = f1 && addReparacionPeza(rep.getId(), idPeza);
+			}
+
+			return f1;
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+
+	public boolean addReparacionPeza(Reparacion rep, Peza peza) {
+		return addReparacionPeza(rep.getId(), peza.getId());
+	}
+
+	public boolean addReparacionPeza(int idReparacion, int idPeza) {
+		try {
+			PreparedStatement ps = con.prepareStatement(
+				"INSERT INTO PezasReparacion (reparacion_id, peza_id)" +
+				"VALUES (?, ?)"
+				);
+			ps.setInt(1, idReparacion);
+			ps.setInt(2, idPeza);
+
+			return ps.executeUpdate() == 1 ? true : false;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+
+	/**
+	 * Actualiza los datos de una Reparacion
+	 * @param rep	Objeto Reparacion con los datos nuevos
+	 * @return		Verdadero en caso de éxito, falso en caso de fallo.
+	 */
+	public boolean updateReparacion(Reparacion rep) {
+		try {
+			// Actualizar datos de Reparacion
+			PreparedStatement ps = con.prepareStatement(
+				"UPDATE Reparacion " +
+				"SET ini = ?, fin = ?, n_horas = ?, " +
+				"completa = ?, causa = ?, solucion = ?, " +
+				"pvp = ?, notas = ?, client_id = ? " +
+				"WHERE id = ?"
+			);
+			
+			ps.setDate(1, new java.sql.Date(rep.getIni().getTime()));
+			ps.setDate(2, new java.sql.Date(rep.getFin().getTime()));
+			ps.setInt(3, rep.getNhoras());
+			ps.setBoolean(4, rep.isCompleta());
+			ps.setString(5, rep.getCausa());
+			ps.setString(6, rep.getSolucion());
+			ps.setBigDecimal(7, rep.getPvp());
+			ps.setString(8, rep.getNotas());
+			ps.setInt(9, rep.getIdCliente());
+			ps.setInt(10, rep.getId());
+
+			boolean f1 = ps.executeUpdate() == 1 ? true : false;
+			
+			// Eliminar todas las piezas anteriores
+			PreparedStatement ps0 = con.prepareStatement(
+				"DELETE FROM PezasReparacion " + 
+				"WHERE reparacion_id = ?"
+			);
+			ps0.setInt(1, rep.getId());
+			
+			// Guardar las piezas nuevas
+			for (int idPeza : rep.getIdsPezas()) {
+				f1 = f1 && addReparacionPeza(rep.getId(), idPeza);
+			}
+
+			return f1;
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
+	}
+
+	/**
+	 * Elimina una reparacion de la base de datos
+	 * @param id	Id de la reparacion a eliminar
+	 * @return		Verdadero en caso de éxito, falso en caso de fallo.
+	 */
+	public boolean deleteReparacion(int id) {
+		try {
+			PreparedStatement ps = con.prepareStatement(
+				"DELETE FROM Reparacion WHERE id = ?"
+			);
+			ps.setInt(1, id);
+
+			return ps.executeUpdate() == 1 ? true : false;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+	//#endregion
+
 }

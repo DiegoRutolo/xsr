@@ -5,6 +5,10 @@ import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -12,10 +16,12 @@ import org.json.JSONObject;
 
 import eu.rutolo.xsr.Main;
 import eu.rutolo.xsr.data.Log;
+import eu.rutolo.xsr.data.Traductor;
 import eu.rutolo.xsr.db.Cliente;
 import eu.rutolo.xsr.db.Operacions;
 import eu.rutolo.xsr.db.Pedido;
 import eu.rutolo.xsr.db.Peza;
+import eu.rutolo.xsr.db.Reparacion;
 
 public class Servidor extends Thread {
 
@@ -24,7 +30,7 @@ public class Servidor extends Thread {
 
 	private Socket soc;
 	private Operacions op;
-	
+
 	public Servidor(Socket soc) {
 		this.soc = soc;
 	}
@@ -103,6 +109,9 @@ public class Servidor extends Thread {
 					}
 					break;
 				case Peticion.X_REPARACIONS:
+					for (Reparacion rep : op.listReparaciones()) {
+						arr.put(new JSONObject(rep));
+					}
 					break;
 				default:
 					peticionError(p);
@@ -125,12 +134,8 @@ public class Servidor extends Thread {
 				case Peticion.X_CLIENTES:
 					// Crear cliente
 					JSONObject clj = p.getDatos().getJSONObject("cliente");
-					exito = op.addCliente(
-						clj.getString("nome"),
-						clj.getString("tlf"),
-						clj.getString("email"),
-						clj.getString("notas")
-					);
+					exito = op.addCliente(clj.getString("nome"), clj.getString("tlf"), clj.getString("email"),
+							clj.getString("notas"));
 					if (exito) {
 						Log.i("Creado cliente " + clj.getString("nome"));
 					} else {
@@ -140,15 +145,9 @@ public class Servidor extends Thread {
 
 				case Peticion.X_PEZAS:
 					JSONObject pezaJson = p.getDatos().getJSONObject("peza");
-					exito = op.addPeza(
-						pezaJson.getString("codigo"),
-						pezaJson.getString("prov"),
-						pezaJson.getString("nome"),
-						pezaJson.getString("foto"),
-						pezaJson.getBigDecimal("precio"),
-						pezaJson.getInt("cantidade"),
-						pezaJson.getString("notas")
-					);
+					exito = op.addPeza(pezaJson.getString("codigo"), pezaJson.getString("prov"),
+							pezaJson.getString("nome"), pezaJson.getString("foto"), pezaJson.getBigDecimal("precio"),
+							pezaJson.getInt("cantidade"), pezaJson.getString("notas"));
 					if (exito) {
 						Log.i("Creada peza " + pezaJson.getString("nome"));
 					} else {
@@ -176,16 +175,56 @@ public class Servidor extends Thread {
 						respuesta = Respuesta.getRespuesta404(contenido404);
 						flag404 = true;
 					} else {
-						exito = op.addPedido(
-							idCliente,
-							idPeza,
-							pedidoJson.getString("pvp"),
-							pedidoJson.getString("estado")
-						);
+						exito = op.addPedido(idCliente, idPeza, pedidoJson.getString("pvp"),
+								pedidoJson.getString("estado"));
 					}
 					break;
+
 				case Peticion.X_REPARACIONS:
+					JSONObject repJson = p.getDatos().getJSONObject("reparacion");
+					int idClienteRep = repJson.getInt("id_cliente");
+
+					if (op.getCliente(idClienteRep) == null) {
+						JSONObject contenido404 = new JSONObject();
+							contenido404.put("obj", "peza");
+							contenido404.put("id", idClienteRep);
+	
+							respuesta = Respuesta.getRespuesta404(contenido404);
+							flag404 = true;
+					} else {
+
+						Reparacion rep = new Reparacion(
+							Traductor.string2date(repJson.getString("ini")),
+							Traductor.string2date(repJson.getString("fin")),
+							repJson.getInt("n_horas"),
+							repJson.getBoolean("completa"),
+							repJson.getString("causa"),
+							repJson.getString("solucion"),
+							repJson.getBigDecimal("pvp"),
+							repJson.getString("notas"),
+							idClienteRep
+						);
+
+						// Comprobar y añadir las piezas
+						JSONArray idsPezasJson = repJson.getJSONArray("ids_pezas");
+						for (int i = 0; i < idsPezasJson.length(); i++) {
+							int id = (int) idsPezasJson.get(i);
+
+							if (op.getPeza(id) == null) {
+								JSONObject contenido404 = new JSONObject();
+								contenido404.put("obj", "peza");
+								contenido404.put("id", id);
+		
+								respuesta = Respuesta.getRespuesta404(contenido404);
+								flag404 = true;
+							} else {
+								rep.addIdPeza(id);
+							}
+						}
+						exito = op.addReparacion(rep);
+					}
 					break;
+
 				default:
 					peticionError(p);
 					return;
@@ -202,8 +241,10 @@ public class Servidor extends Thread {
 	}
 
 	private void peticionUpdate(Peticion p) throws IOException {
-		boolean exito = false;
+		Respuesta respuesta = null;
 		try {
+			boolean exito = false;
+			boolean flag404 = false;
 			int id = 0;
 			switch (p.getApartado()) {
 				case Peticion.X_CLIENTES:
@@ -299,17 +340,97 @@ public class Servidor extends Thread {
 					break;
 
 				case Peticion.X_REPARACIONS:
+					id = Integer.parseInt(p.getSelec().getString("id"));
+					Reparacion rep = op.getReparacion(id);
+					try {
+						rep.setIni(
+							Traductor.string2date(p.getDatos().getString("ini"))
+						);
+					} catch (Exception e) {}
+					try {
+						rep.setFin(
+							Traductor.string2date(p.getDatos().getString("fin"))
+						);
+					} catch (Exception e) {}
+					try {
+						rep.setNhoras(
+							p.getDatos().getInt("ini")
+						);
+					} catch (Exception e) {}
+					try {
+						rep.setCompleta(
+							p.getDatos().getBoolean("completa")
+						);
+					} catch (Exception e) {}
+					try {
+						rep.setCausa(
+							p.getDatos().getString("causa")
+						);
+					} catch (Exception e) {}
+					try {
+						rep.setSolucion(
+							p.getDatos().getString("solucion")
+						);
+					} catch (Exception e) {}
+					try {
+						rep.setPvp(
+							p.getDatos().getBigDecimal("pvp")
+						);
+					} catch (Exception e) {}
+					try {
+						rep.setNotas(
+							p.getDatos().getString("notas")
+						);
+					} catch (Exception e) {}
+					try {
+						int idClienteRep = p.getDatos().getInt("id_cliente");
+						if (op.getCliente(id) == null) {
+							JSONObject contenido404 = new JSONObject();
+							contenido404.put("obj", "peza");
+							contenido404.put("id", id);
+	
+							respuesta = Respuesta.getRespuesta404(contenido404);
+							flag404 = true;
+							break;
+						} else {
+							rep.setIdCliente(
+								idClienteRep
+							);
+						}
+					} catch (Exception e) {}
+					
+					// Comprobar y añadir las piezas
+					JSONArray idsPezasJson = p.getDatos().getJSONArray("ids_pezas");
+					for (int i = 0; i < idsPezasJson.length(); i++) {
+						int idPezaRep = (int) idsPezasJson.get(i);
+
+						if (op.getCliente(idPezaRep) == null) {
+							JSONObject contenido404 = new JSONObject();
+							contenido404.put("obj", "peza");
+							contenido404.put("id", id);
+	
+							respuesta = Respuesta.getRespuesta404(contenido404);
+							flag404 = true;
+							break;
+						} else {
+							rep.addIdPeza(id);
+						}
+					}
 					break;
 
 				default:
 					peticionError(p);
 					return;
 			}
+
+			if (!flag404) {
+				respuesta = Respuesta.getRespuesta(p);
+			}
 		} catch (JSONException e) {
 			peticionError(p);
 		}
 
-		enviarRespuesta(Respuesta.getRespuesta(p.getTipo(), exito));
+		enviarRespuesta(respuesta);
 	}
 
 	private void peticionDelete(Peticion p) throws IOException {
@@ -336,6 +457,8 @@ public class Servidor extends Thread {
 					exito = op.deletePedido(idCliente, idPeza);
 					break;
 				case Peticion.X_REPARACIONS:
+					id = p.getSelec().getInt("idReparacion");
+					exito = op.deleteReparacion(id);
 					break;
 				default:
 					peticionError(p);

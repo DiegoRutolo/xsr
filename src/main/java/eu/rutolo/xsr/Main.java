@@ -15,6 +15,7 @@ import eu.rutolo.xsr.server.Servidor;
 public class Main {
 
 	public static final int PORT = 10097;
+	public static final String DATE_FORMAT = "yyyy-MM-dd";
 	public static Config conf;
 	public static Operacions db;
 
