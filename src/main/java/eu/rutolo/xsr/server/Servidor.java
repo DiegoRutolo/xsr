@@ -5,10 +5,7 @@ import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.ArrayList;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -208,7 +205,7 @@ public class Servidor extends Thread {
 						// Comprobar y añadir las piezas
 						JSONArray idsPezasJson = repJson.getJSONArray("ids_pezas");
 						for (int i = 0; i < idsPezasJson.length(); i++) {
-							int id = (int) idsPezasJson.get(i);
+							int id = Integer.parseInt((String) idsPezasJson.get(i));
 
 							if (op.getPeza(id) == null) {
 								JSONObject contenido404 = new JSONObject();
@@ -400,22 +397,33 @@ public class Servidor extends Thread {
 					} catch (Exception e) {}
 					
 					// Comprobar y añadir las piezas
-					JSONArray idsPezasJson = p.getDatos().getJSONArray("ids_pezas");
-					for (int i = 0; i < idsPezasJson.length(); i++) {
-						int idPezaRep = (int) idsPezasJson.get(i);
-
-						if (op.getCliente(idPezaRep) == null) {
-							JSONObject contenido404 = new JSONObject();
-							contenido404.put("obj", "peza");
-							contenido404.put("id", id);
+					try {
+						ArrayList<Integer> idsPiezasNuevas = new ArrayList<>();
+						JSONArray idsPezasJson = p.getDatos().getJSONArray("ids_pezas");
+						for (int i = 0; i < idsPezasJson.length(); i++) {
+							int idPezaRep = (int) idsPezasJson.get(i);
 	
-							respuesta = Respuesta.getRespuesta404(contenido404);
-							flag404 = true;
-							break;
-						} else {
-							rep.addIdPeza(id);
+							if (op.getCliente(idPezaRep) == null) {
+								JSONObject contenido404 = new JSONObject();
+								contenido404.put("obj", "peza");
+								contenido404.put("id", id);
+		
+								respuesta = Respuesta.getRespuesta404(contenido404);
+								flag404 = true;
+								break;
+							} else {
+								idsPiezasNuevas.add(id);
+							}
 						}
-					}
+
+						int[] arr = new int[idsPiezasNuevas.size()];
+						for (int i = 0; i < idsPiezasNuevas.size(); i++) {
+							arr[i] = idsPiezasNuevas.get(i);
+						}
+						rep.setIdsPezas(arr);
+					} catch (Exception e) {}
+
+					op.updateReparacion(rep);
 					break;
 
 				default:
@@ -428,6 +436,10 @@ public class Servidor extends Thread {
 			}
 		} catch (JSONException e) {
 			peticionError(p);
+			return;
+		} catch (NumberFormatException e) {
+			peticionError(p);
+			return;
 		}
 
 		enviarRespuesta(respuesta);
@@ -457,7 +469,7 @@ public class Servidor extends Thread {
 					exito = op.deletePedido(idCliente, idPeza);
 					break;
 				case Peticion.X_REPARACIONS:
-					id = p.getSelec().getInt("idReparacion");
+					id = p.getSelec().getInt("id");
 					exito = op.deleteReparacion(id);
 					break;
 				default:

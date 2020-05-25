@@ -445,7 +445,7 @@ public class Operacions {
 	}
 	//#endregion
 
-	// #region Cliente
+	// #region Reparacion
 	/**
 	 * Devuelve una lista de todas las reparaciones.
 	 * @return Lista de objetos Reparacion
@@ -471,7 +471,7 @@ public class Operacions {
 					);
 				PreparedStatement ps = con.prepareStatement(
 					"SELECT * " + 
-					"FRROM PezasReparacion " + 
+					"FROM PezasReparacion " + 
 					"WHERE reparacion_id = ?"
 				);
 				ps.setInt(1, rep.getId());
@@ -518,7 +518,7 @@ public class Operacions {
 					);
 				PreparedStatement ps0 = con.prepareStatement(
 					"SELECT * " + 
-					"FRROM PezasReparacion " + 
+					"FROM PezasReparacion " + 
 					"WHERE reparacion_id = ?"
 				);
 				ps0.setInt(1, rep.getId());
@@ -637,6 +637,7 @@ public class Operacions {
 				"WHERE reparacion_id = ?"
 			);
 			ps0.setInt(1, rep.getId());
+			ps0.executeUpdate();
 			
 			// Guardar las piezas nuevas
 			for (int idPeza : rep.getIdsPezas()) {
