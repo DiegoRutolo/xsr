@@ -119,4 +119,4 @@ A continuación detállanse algunhas posibles ideas para mellorar XSR.
  * Mellorar a eficiencia
  * Aumentar o número de operacions posibles
  * Implementación de diversos clientes
- * Soporte para Docker Swarm para mellorar a escalabilidade
+ * Mellorar a escalabilidade optimizando a aplicación para Kubernetes ou Swarm
