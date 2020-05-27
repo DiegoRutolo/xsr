@@ -72,10 +72,69 @@ Pódese consultar o log con `docker logs xsr`.
 
 As copias de seguridade dependen do método de instalación. O primeiro utiliza [volumes de docker](https://docs.docker.com/storage/volumes/), os demais dependen de cada instalación particular de MySQL.
 
+### Volume de datos
+
+Os datos da base de datos están gardados nun volume chamado **xsr-mysql-data**.
+
+Eliminar o contenedor non elimina os datos, de forma que poden ser restaurados mais adiante nun contenedor diferente, de ser necesario.
+
+Para eliminalos permanente mente pódese utilizar o comando
+`docker volume rm xsr-mysql-data` ou pasar o argumento `--db` ó script `cleanup.sh`.
+
+### Actualizar
+
+Neste momento a única forma de instalar unha nova versión de XSR é desinstalando a anterior.
+
+### Desinstalación
+
+Pódese utilizar o script `cleanup.sh` para eliminar todos os arquivos de XSR do sistema.
+
 -------------------------
 
 ## USO
 
 Toda a interación co sistema realízase a través de *clientes xsr* polo que haberá que consultar a documentación específica de cada un deles.
 
-Neste repositorio inclúese un conxunto de scripts que poden funcionar como cliente de proba para demostrar o funcionamento do servidor.
+Este repositorio inclúe 2 clientes:
+
+#### test-client
+
+É un conxunto de scripts bash que utilizan os comandos **curl** e **jq** para realizar todas as posibles operacións.
+
+Pódense atopar no [directiorio client](client/).
+
+#### PCXSR
+
+É un cliente escrito en Python utilizando a librería Tkinter.
+
+A documentación completa deste cliente está [no seu directorio](pcxsr/).
+
+------------------
+
+## Xestión de incidencias
+
+A continuación lístanse os problemas mais comúns e unha serie de puntos a comprobar.
+
+En todos os casos unha das mellores formas de ver posibles causas de problemas é co comando `docker logs xsr`
+
+### Problemas de conexión coa DB
+
++ Usuario e contrasinal en `xsrd.conf` e `build.sh`.
+    + En caso de que a do build script sexa incorrecta a mellor opción en cambiar a variable de entorno *MYSQL_ROOT_PASSWORD* do contenedor *xsr-mysql*.
++ Resposta de pings entre hosts
+
+### Problemas de conexión co cliente
+
++ Pings
++ Tamaño dos paquetes
+    + Algúns clientes, entre eles *curl*, utilizan a cabeceira HTTP [Expect](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Expect) cando os datos a enviar son moi grandes. Esto pode causar fallos, por exemplo, cando se intenta enviar unha imaxe codificada en base64.
+
+-----------------
+
+## Protección de datos
+
+Toda a información está gardada exclusivamente na base de datos, polo que, igual que coas copias de seguridade, se queremos encriptala ou securizala doutras formas, é aqui onde se debe facer.
+
+No caso de utlizar a base de datos predeteminada a información está gardada nun volume de docker. Hai unha descrición detallada mais arriba, na sección de *Administración*
+
+Actualmente, a mellor forma de controlar o acceso ó sistema é securizar a rede local. En versións futuras implementaráse cifrado na comunicación cliente-servidor.
