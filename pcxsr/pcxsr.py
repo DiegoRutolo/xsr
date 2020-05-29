@@ -3,7 +3,7 @@
 import os
 import tkinter as tk
 from PIL import ImageTk, Image
-from clases import clases
+from src import componentes
 
 basePath = os.path.dirname(__file__)
 resPath = os.path.join(basePath, "res")
@@ -13,7 +13,7 @@ root.title("PC-XSR")
 root.geometry("600x600")
 
 def abrirXclientes():
-	xc = clases.Xclientes(root, resPath)
+	xc = componentes.Xclientes(root, resPath)
 	xc.mainloop()
 
 img = ImageTk.PhotoImage(
