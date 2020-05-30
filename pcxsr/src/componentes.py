@@ -8,7 +8,7 @@ from . import funs
 class ItemCliente(tk.Frame):
 	def __init_(self, master=None, *args, **kwargs):
 		print("soy un contructor de verdad")
-		tk.Frame.__init__(self, master, *args, **kwargs)
+		tk.Frame.__init__(self, master, bg="White", *args, **kwargs)
 		self.master = master
 
 	'''
@@ -21,11 +21,13 @@ class ItemCliente(tk.Frame):
 		self.texto = tk.StringVar()
 		self.texto.set(self.cliente.getLabel())
 
-		self.label = tk.Label(master=self, textvariable=self.texto, wraplength=25)
-		self.label.pack(side=tk.LEFT, fil=tk.X)
+		self.label = tk.Label(master=self, textvariable=self.texto, wraplength=450)
+		self.label.pack(expand=True, side=tk.LEFT, fil=tk.X)
 		#endregion
 
 		#region Botones
+		self.btnVer = tk.Button(self, text="Ver", command=self.ver)
+		self.btnVer.pack(side=tk.RIGHT)
 		self.btnEdit = tk.Button(self, text="Editar", command=self.edit)
 		self.btnEdit.pack(side=tk.RIGHT)
 		self.btnDel = tk.Button(self, text="Borrar", command=self.delete)
@@ -33,7 +35,10 @@ class ItemCliente(tk.Frame):
 		#endregion
 		return self
 
-	def edit(self):
+	def ver(self):
+		self.edit(readonly=True)
+
+	def edit(self, readonly=False):
 		pass
 
 	def delete(self):
@@ -62,12 +67,10 @@ class Xclientes(tk.Toplevel):
 		#endregion
 
 		#region Lista
-		self.widLista = tk.Frame(self)
-		self.widLista.pack(side=tk.TOP)
-
 		tk.Label(master=self, text="Listado de clientes").pack(side=tk.TOP)
 
-		ItemCliente(master=self.widLista).pack(side=tk.TOP)
+		self.widLista = tk.Frame(self)
+		self.widLista.pack(expand=True, side=tk.TOP, fill=tk.X)
 
 		self.refresh()
 		#endregion
@@ -79,7 +82,7 @@ class Xclientes(tk.Toplevel):
 			i.destroy()
 
 		for c in funs.listClientes():
-			item = ItemCliente(master=self.widLista)
+			item = ItemCliente(master=self.widLista, bg="white")
 			item.build(c)
 			item.pack(expand=True, side=tk.TOP, fill=tk.X)
 		
