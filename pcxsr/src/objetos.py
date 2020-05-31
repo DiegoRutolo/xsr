@@ -12,4 +12,4 @@ class Cliente():
 		self.notas = notas
 
 	def getLabel(self):
-		return str(self.id) + " " + self.nome
+		return self.nome

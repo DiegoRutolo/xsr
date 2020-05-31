@@ -29,16 +29,16 @@ def getReqObjGet(apartado="x_clientes", rol="xerente"):
 	}
 
 def listClientes():
-	r = requests.post("http://localhost:10097", json=getReqObjGet())
-	datos = json.loads(r.text)
-
 	listaClientes = []
+
 	try:
+		r = requests.post("http://localhost:10097", json=getReqObjGet())
+		datos = json.loads(r.text)
 		for c in datos["data"]:
 			listaClientes.append(objetos.Cliente(
 				c["id"], c["nome"], c["tlf"], c["email"], c["notas"]
 			))
 	except:
-		print("Error procesando datos recibidos")
+		print("Error procesando datos")
 	
 	return listaClientes

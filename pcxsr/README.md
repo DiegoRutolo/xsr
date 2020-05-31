@@ -1,6 +1,6 @@
 # PCXSR
 
-**Python client XSR** é un cliente para XSR
+**Python client XSR** é un cliente para XSR.
 
 ## Dependencias
 

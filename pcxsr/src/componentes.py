@@ -26,12 +26,12 @@ class ItemCliente(tk.Frame):
 		#endregion
 
 		#region Botones
-		self.btnVer = tk.Button(self, text="Ver", command=self.ver)
-		self.btnVer.pack(side=tk.RIGHT)
-		self.btnEdit = tk.Button(self, text="Editar", command=self.edit)
-		self.btnEdit.pack(side=tk.RIGHT)
 		self.btnDel = tk.Button(self, text="Borrar", command=self.delete)
 		self.btnDel.pack(side=tk.RIGHT)
+		self.btnEdit = tk.Button(self, text="Editar", command=self.edit)
+		self.btnEdit.pack(side=tk.RIGHT)
+		self.btnVer = tk.Button(self, text="Ver", command=self.ver)
+		self.btnVer.pack(side=tk.RIGHT)
 		#endregion
 		return self
 
@@ -39,7 +39,8 @@ class ItemCliente(tk.Frame):
 		self.edit(readonly=True)
 
 	def edit(self, readonly=False):
-		pass
+		frmEditCliente = FrmEditCliente(self.cliente, master=self.master, readonly=readonly)
+		frmEditCliente.mainloop()
 
 	def delete(self):
 		pass
@@ -87,4 +88,60 @@ class Xclientes(tk.Toplevel):
 			item.pack(expand=True, side=tk.TOP, fill=tk.X)
 		
 	def add(self):
+		pass
+
+class FrmEditCliente(tk.Toplevel):
+	def __init__(self, cliente, master=None, readonly=False):
+		tk.Toplevel.__init__(self, master)
+		self.master = master
+		self.cliente = cliente
+		self.title("Datos " + str(self.cliente.nome))
+
+		#Variables de los datos
+		nome = tk.StringVar()
+		nome.set(self.cliente.nome)
+		tlf = tk.StringVar()
+		tlf.set(self.cliente.tlf)
+		email = tk.StringVar()
+		email.set(self.cliente.email)
+		notas = tk.StringVar()
+		notas.set(self.cliente.notas)
+	
+		lblId = tk.Label(master=self, text="ID: ")
+		lblId.grid(column=0, row=0)
+		lblIdTxt = tk.Label(master=self, text=str(self.cliente.id))
+		lblIdTxt.grid(column=1, row=0)
+
+		lblNome = tk.Label(master=self, text="Nome: ")
+		lblNome.grid(column=0, row=1)
+		txtNome = tk.Entry(master=self, textvariable=nome)
+		txtNome.grid(column=1, row=1)
+
+		lblTlf = tk.Label(master=self, text="Tlf: ")
+		lblTlf.grid(column=0, row=2)
+		txtTlf = tk.Entry(master=self, textvariable=tlf)
+		txtTlf.grid(column=1, row=2)
+
+		lblEmail = tk.Label(master=self, text="eMail: ")
+		lblEmail.grid(column=0, row=3)
+		txtEmail = tk.Entry(master=self, textvariable=email)
+		txtEmail.grid(column=1, row=3)
+
+		lblNotas = tk.Label(master=self, text="Notas: ")
+		lblNotas.grid(column=0, row=4)
+		txtNotas = tk.Text(master=self)
+		txtNotas.grid(column=1, row=4)
+		#Insertar la nota real
+		txtNotas.insert(tk.INSERT, notas.get())
+
+		btnCancel = tk.Button(master=self, text="Cancelar", command=self.cancel)
+		btnCancel.grid(column=0, row=5)
+
+		btnSave = tk.Button(master=self, text="Gardar", command = self.save)
+		btnSave.grid(column=1, row=5)
+
+	def cancel(self):
+		self.destroy()
+
+	def save(self):
 		pass
