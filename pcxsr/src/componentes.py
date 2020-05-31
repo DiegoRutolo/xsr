@@ -2,6 +2,7 @@
 
 import os
 import tkinter as tk
+import tkinter.messagebox as tkMsgBox
 from PIL import ImageTk, Image
 from . import funs
 
@@ -98,14 +99,12 @@ class FrmEditCliente(tk.Toplevel):
 		self.title("Datos " + str(self.cliente.nome))
 
 		#Variables de los datos
-		nome = tk.StringVar()
-		nome.set(self.cliente.nome)
-		tlf = tk.StringVar()
-		tlf.set(self.cliente.tlf)
-		email = tk.StringVar()
-		email.set(self.cliente.email)
-		notas = tk.StringVar()
-		notas.set(self.cliente.notas)
+		self.nome = tk.StringVar()
+		self.nome.set(self.cliente.nome)
+		self.tlf = tk.StringVar()
+		self.tlf.set(self.cliente.tlf)
+		self.email = tk.StringVar()
+		self.email.set(self.cliente.email)
 	
 		lblId = tk.Label(master=self, text="ID: ")
 		lblId.grid(column=0, row=0)
@@ -114,25 +113,25 @@ class FrmEditCliente(tk.Toplevel):
 
 		lblNome = tk.Label(master=self, text="Nome: ")
 		lblNome.grid(column=0, row=1)
-		txtNome = tk.Entry(master=self, textvariable=nome)
+		txtNome = tk.Entry(master=self, textvariable=self.nome)
 		txtNome.grid(column=1, row=1)
 
 		lblTlf = tk.Label(master=self, text="Tlf: ")
 		lblTlf.grid(column=0, row=2)
-		txtTlf = tk.Entry(master=self, textvariable=tlf)
+		txtTlf = tk.Entry(master=self, textvariable=self.tlf)
 		txtTlf.grid(column=1, row=2)
 
 		lblEmail = tk.Label(master=self, text="eMail: ")
 		lblEmail.grid(column=0, row=3)
-		txtEmail = tk.Entry(master=self, textvariable=email)
+		txtEmail = tk.Entry(master=self, textvariable=self.email)
 		txtEmail.grid(column=1, row=3)
 
 		lblNotas = tk.Label(master=self, text="Notas: ")
 		lblNotas.grid(column=0, row=4)
-		txtNotas = tk.Text(master=self)
-		txtNotas.grid(column=1, row=4)
+		self._txtNotas = tk.Text(master=self)
+		self._txtNotas.grid(column=1, row=4)
 		#Insertar la nota real
-		txtNotas.insert(tk.INSERT, notas.get())
+		self._txtNotas.insert(tk.INSERT, self.cliente.notas)
 
 		btnCancel = tk.Button(master=self, text="Cancelar", command=self.cancel)
 		btnCancel.grid(column=0, row=5)
@@ -144,4 +143,20 @@ class FrmEditCliente(tk.Toplevel):
 		self.destroy()
 
 	def save(self):
-		pass
+		self.cliente.nome = self.nome.get()
+		self.cliente.tlf = self.tlf.get()
+		self.cliente.email = self.email.get()
+		self.cliente.notas = self._txtNotas.get('1.0', tk.END)
+
+		try:
+			result = funs.updateCliente(self.cliente)
+
+			if result == 201:
+				tkMsgBox.showinfo("OK", message="Datos actualizados")
+				self.destroy()
+			else:
+				print("Error " + str(result) + " actualizando datos ")
+				tkMsgBox.showerror("ERROR " + str(result), message="Error al guardar los datos")
+		except:
+			print("Error actualizando datos (2)")
+			tkMsgBox.showerror("ERROR", message="Error al guardar los datos")

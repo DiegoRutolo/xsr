@@ -6,6 +6,8 @@ import json
 import requests
 from . import objetos
 
+CON_STR = "http://localhost:10097"
+
 def listClientesInventados():
 	listaClientes = []
 
@@ -17,7 +19,7 @@ def listClientesInventados():
 
 	return listaClientes
 
-def getReqObjGet(apartado="x_clientes", rol="xerente"):
+def getReqObj_Get(apartado="x_clientes", rol="xerente"):
 	return {
 		"usuario": {
 			"rol": rol
@@ -28,11 +30,26 @@ def getReqObjGet(apartado="x_clientes", rol="xerente"):
 		}
 	}
 
+def getReqObj_UpdateCliente(cliente, rol="xerente"):
+	return {
+		"usuario": {
+			"rol": rol
+		},
+		"operacion": {
+			"apartado": "x_clientes",
+			"tipo": "update",
+			"selec": {
+				"id": cliente.id
+			},
+			"datos": cliente.getDic()
+		}
+	}
+
 def listClientes():
 	listaClientes = []
 
 	try:
-		r = requests.post("http://localhost:10097", json=getReqObjGet())
+		r = requests.post(CON_STR, json=getReqObj_Get())
 		datos = json.loads(r.text)
 		for c in datos["data"]:
 			listaClientes.append(objetos.Cliente(
@@ -42,3 +59,7 @@ def listClientes():
 		print("Error procesando datos")
 	
 	return listaClientes
+
+def updateCliente(cliente):
+	r = requests.post(CON_STR, json=getReqObj_UpdateCliente(cliente))
+	return r.status_code

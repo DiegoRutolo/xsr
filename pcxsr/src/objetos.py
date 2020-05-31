@@ -13,3 +13,9 @@ class Cliente():
 
 	def getLabel(self):
 		return self.nome
+	
+	def getDic(self):
+		return {
+			"id": self.id, "nome": self.nome, "tlf": self.tlf,
+			"email": self.email, "notas": self.notas
+		}
