@@ -154,8 +154,8 @@ public class Servidor extends Thread {
 
 				case Peticion.X_PEDIDOS:
 					JSONObject pedidoJson = p.getDatos().getJSONObject("pedido");
-					int idCliente = Integer.parseInt(pedidoJson.getString("idCliente"));
-					int idPeza = Integer.parseInt(pedidoJson.getString("idPeza"));
+					int idCliente = pedidoJson.getInt("idCliente");
+					int idPeza = pedidoJson.getInt("idPeza");
 
 					if (op.getCliente(idCliente) == null) {
 						JSONObject contenido404 = new JSONObject();
@@ -245,7 +245,7 @@ public class Servidor extends Thread {
 			int id = 0;
 			switch (p.getApartado()) {
 				case Peticion.X_CLIENTES:
-					id = Integer.parseInt(p.getSelec().getString("id"));
+					id = p.getSelec().getInt("id");
 					Cliente c = op.getCliente(id);
 					// Modificar los datos nuevos en el objeto
 					try {
@@ -276,7 +276,7 @@ public class Servidor extends Thread {
 					break;
 
 				case Peticion.X_PEZAS:
-					id = Integer.parseInt(p.getSelec().getString("id"));
+					id = p.getSelec().getInt("id");
 					Peza peza = op.getPeza(id);
 					try {
 						peza.setCodigo(
@@ -318,8 +318,8 @@ public class Servidor extends Thread {
 					break;
 
 				case Peticion.X_PEDIDOS:
-					int idCliente = Integer.parseInt(p.getSelec().getString("idCliente"));
-					int idPeza = Integer.parseInt(p.getSelec().getString("idPeza"));
+					int idCliente = p.getSelec().getInt("idCliente");
+					int idPeza = p.getSelec().getInt("idPeza");
 					
 					Pedido pedido = op.getPedido(idCliente, idPeza);
 					try {
@@ -337,7 +337,7 @@ public class Servidor extends Thread {
 					break;
 
 				case Peticion.X_REPARACIONS:
-					id = Integer.parseInt(p.getSelec().getString("id"));
+					id = p.getSelec().getInt("id");
 					Reparacion rep = op.getReparacion(id);
 					try {
 						rep.setIni(
@@ -435,9 +435,11 @@ public class Servidor extends Thread {
 				respuesta = Respuesta.getRespuesta(p);
 			}
 		} catch (JSONException e) {
+			e.printStackTrace();
 			peticionError(p);
 			return;
 		} catch (NumberFormatException e) {
+			e.printStackTrace();
 			peticionError(p);
 			return;
 		}
@@ -452,20 +454,20 @@ public class Servidor extends Thread {
 			int id = 0;
 			switch (p.getApartado()) {
 				case Peticion.X_CLIENTES:
-					id = Integer.parseInt(p.getSelec().getString("id"));
+					id = p.getSelec().getInt("id");
 					datoBorrado = new JSONObject(op.getCliente(id));
 					exito = op.deleteCliente(id);
 					break;
 
 				case Peticion.X_PEZAS:
-					id = Integer.parseInt(p.getSelec().getString("id"));
+					id = p.getSelec().getInt("id");
 					datoBorrado = new JSONObject(op.getPeza(id));
 					exito = op.deletePeza(id);
 					break;
 
 				case Peticion.X_PEDIDOS:
-					int idCliente = Integer.parseInt(p.getSelec().getString("idCliente"));
-					int idPeza = Integer.parseInt(p.getSelec().getString("idPeza"));
+					int idCliente = p.getSelec().getInt("idCliente");
+					int idPeza = p.getSelec().getInt("idPeza");
 					exito = op.deletePedido(idCliente, idPeza);
 					break;
 				case Peticion.X_REPARACIONS:
