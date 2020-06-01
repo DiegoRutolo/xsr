@@ -98,6 +98,8 @@ class FrmEditCliente(tk.Toplevel):
 		self.cliente = cliente
 		self.title("Datos " + str(self.cliente.nome))
 
+		self.campos = {}
+
 		#Variables de los datos
 		self.nome = tk.StringVar()
 		self.nome.set(self.cliente.nome)
@@ -110,34 +112,51 @@ class FrmEditCliente(tk.Toplevel):
 		lblId.grid(column=0, row=0)
 		lblIdTxt = tk.Label(master=self, text=str(self.cliente.id))
 		lblIdTxt.grid(column=1, row=0)
+		self.campos["id"] = lblIdTxt
 
 		lblNome = tk.Label(master=self, text="Nome: ")
 		lblNome.grid(column=0, row=1)
 		txtNome = tk.Entry(master=self, textvariable=self.nome)
 		txtNome.grid(column=1, row=1)
+		self.campos["nome"] = txtNome
 
 		lblTlf = tk.Label(master=self, text="Tlf: ")
 		lblTlf.grid(column=0, row=2)
 		txtTlf = tk.Entry(master=self, textvariable=self.tlf)
 		txtTlf.grid(column=1, row=2)
+		self.campos["tlf"] = txtTlf
 
 		lblEmail = tk.Label(master=self, text="eMail: ")
 		lblEmail.grid(column=0, row=3)
 		txtEmail = tk.Entry(master=self, textvariable=self.email)
 		txtEmail.grid(column=1, row=3)
+		self.campos["email"] = txtEmail
 
 		lblNotas = tk.Label(master=self, text="Notas: ")
 		lblNotas.grid(column=0, row=4)
-		self._txtNotas = tk.Text(master=self)
-		self._txtNotas.grid(column=1, row=4)
+		txtNotas = tk.Text(master=self)
+		txtNotas.grid(column=1, row=4)
 		#Insertar la nota real
-		self._txtNotas.insert(tk.INSERT, self.cliente.notas)
+		txtNotas.insert(tk.INSERT, self.cliente.notas)
+		self.campos["notas"] = txtNotas
 
-		btnCancel = tk.Button(master=self, text="Cancelar", command=self.cancel)
-		btnCancel.grid(column=0, row=5)
+		if readonly:
+			btnClose = tk.Button(master=self, text="Pechar", command=self.cancel)
+			btnClose.grid(column=1, row=5)
 
-		btnSave = tk.Button(master=self, text="Gardar", command = self.save)
-		btnSave.grid(column=1, row=5)
+			for k, v in self.campos.items():
+				v.config(state=tk.DISABLED, fg="black")
+
+			# txtNome.config(state=tk.DISABLED)
+			# txtTlf.config(state=tk.DISABLED)
+			# txtEmail.config(state=tk.DISABLED)
+			# txtNotas.config(state=tk.DISABLED)
+		else:
+			btnCancel = tk.Button(master=self, text="Cancelar", command=self.cancel)
+			btnCancel.grid(column=0, row=5)
+
+			btnSave = tk.Button(master=self, text="Gardar", command = self.save)
+			btnSave.grid(column=1, row=5)
 
 	def cancel(self):
 		self.destroy()
@@ -146,7 +165,7 @@ class FrmEditCliente(tk.Toplevel):
 		self.cliente.nome = self.nome.get()
 		self.cliente.tlf = self.tlf.get()
 		self.cliente.email = self.email.get()
-		self.cliente.notas = self._txtNotas.get('1.0', tk.END)
+		self.cliente.notas = self.campos["notas"].get('1.0', tk.END)
 
 		try:
 			result = funs.updateCliente(self.cliente)
