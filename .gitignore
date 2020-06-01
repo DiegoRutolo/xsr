@@ -12,3 +12,5 @@ buildNumber.properties
 .mvn/wrapper/maven-wrapper.jar
 .project
 rebuild.sh
+__pycache__
+*.pyc
