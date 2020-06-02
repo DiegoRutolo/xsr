@@ -31,6 +31,20 @@ def getReqObj_Get(apartado="x_clientes", rol="xerente"):
 		}
 	}
 
+def getReqObj_AddCliente(cliente, rol="xerente"):
+	return {
+		"usuario": {
+			"rol": rol
+		},
+		"operacion": {
+			"apartado": "x_clientes",
+			"tipo": "create",
+			"datos": {
+				"cliente": cliente.getDic()
+			}
+		}
+	}
+
 def getReqObj_UpdateCliente(cliente, rol="xerente"):
 	return {
 		"usuario": {
@@ -63,6 +77,10 @@ def listClientes():
 
 def updateCliente(cliente):
 	r = requests.post(CON_STR, json=getReqObj_UpdateCliente(cliente))
+	return r.status_code
+
+def addCliente(cliente):
+	r = requests.post(CON_STR, json=getReqObj_AddCliente(cliente))
 	return r.status_code
 
 def listPezasInvent():

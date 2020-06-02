@@ -5,6 +5,7 @@ import tkinter as tk
 import tkinter.messagebox as tkMsgBox
 from PIL import ImageTk, Image
 from . import funs
+from . import objetos
 
 #region Cliente
 class ItemCliente(tk.Frame):
@@ -66,7 +67,7 @@ class Xclientes(tk.Toplevel):
 		imgAdd = ImageTk.PhotoImage(
 			Image.open(os.path.join(resPath, "refresh-icon.png")).resize((60, 60), Image.ANTIALIAS)
 		)
-		tk.Button(barraIconos, text="Nuevo", command=self.add).pack(side=tk.LEFT)
+		tk.Button(barraIconos, text="Nuevo cliente", command=self.add).pack(side=tk.LEFT)
 		#endregion
 
 		#region Lista
@@ -90,13 +91,15 @@ class Xclientes(tk.Toplevel):
 			item.pack(expand=True, side=tk.TOP, fill=tk.X)
 		
 	def add(self):
-		pass
+		frmNewCliente = FrmEditCliente(objetos.Cliente(), master=self, newclient=True)
+		frmNewCliente.mainloop()
 
 class FrmEditCliente(tk.Toplevel):
-	def __init__(self, cliente, master=None, readonly=False):
+	def __init__(self, cliente, master=None, readonly=False, newclient=False):
 		tk.Toplevel.__init__(self, master)
 		self.master = master
 		self.cliente = cliente
+		self.newclient = newclient
 		self.title("Datos " + str(self.cliente.nome))
 
 		self.campos = {}
@@ -109,11 +112,12 @@ class FrmEditCliente(tk.Toplevel):
 		self.email = tk.StringVar()
 		self.email.set(self.cliente.email)
 	
-		lblId = tk.Label(master=self, text="ID: ")
-		lblId.grid(column=0, row=0)
-		lblIdTxt = tk.Label(master=self, text=str(self.cliente.id))
-		lblIdTxt.grid(column=1, row=0)
-		self.campos["id"] = lblIdTxt
+		if not newclient:
+			lblId = tk.Label(master=self, text="ID: ")
+			lblId.grid(column=0, row=0)
+			lblIdTxt = tk.Label(master=self, text=str(self.cliente.id))
+			lblIdTxt.grid(column=1, row=0)
+			self.campos["id"] = lblIdTxt
 
 		lblNome = tk.Label(master=self, text="Nome: ")
 		lblNome.grid(column=0, row=1)
@@ -148,10 +152,6 @@ class FrmEditCliente(tk.Toplevel):
 			for k, v in self.campos.items():
 				v.config(state=tk.DISABLED, fg="black")
 
-			# txtNome.config(state=tk.DISABLED)
-			# txtTlf.config(state=tk.DISABLED)
-			# txtEmail.config(state=tk.DISABLED)
-			# txtNotas.config(state=tk.DISABLED)
 		else:
 			btnCancel = tk.Button(master=self, text="Cancelar", command=self.cancel)
 			btnCancel.grid(column=0, row=5)
@@ -169,7 +169,10 @@ class FrmEditCliente(tk.Toplevel):
 		self.cliente.notas = self.campos["notas"].get('1.0', tk.END)
 
 		try:
-			result = funs.updateCliente(self.cliente)
+			if self.newclient:
+				result = funs.addCliente(self.cliente)
+			else:
+				result = funs.updateCliente(self.cliente)
 
 			if result == 201:
 				tkMsgBox.showinfo("OK", message="Datos actualizados")
@@ -180,6 +183,7 @@ class FrmEditCliente(tk.Toplevel):
 		except:
 			print("Error actualizando datos (2)")
 			tkMsgBox.showerror("ERROR", message="Error al guardar los datos")
+		self.master.refresh()
 #endregion
 
 #region Pezas
