@@ -16,6 +16,10 @@ def abrirXclientes():
 	xc = componentes.Xclientes(root, resPath)
 	xc.mainloop()
 
+def abridXpezas():
+	xp = componentes.Xpezas(root, resPath)
+	xp.mainloop()
+
 img = ImageTk.PhotoImage(
 		Image.open(os.path.join(resPath, "customer.png")).resize((80, 80), Image.ANTIALIAS)
 	)
