@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import os
+import decimal as dc
 import tkinter as tk
 import tkinter.messagebox as tkMsgBox
 from PIL import ImageTk, Image
@@ -107,7 +108,7 @@ class Xclientes(tk.Toplevel):
 			item.pack(expand=True, side=tk.TOP, fill=tk.X)
 		
 	def add(self):
-		frmNewCliente = FrmEditCliente(objetos.Cliente(), master=self, newclient=True)
+		frmNewCliente = FrmEditCliente(objetos.Cliente(), master=self, newpeza=True)
 		frmNewCliente.mainloop()
 
 class FrmEditCliente(tk.Toplevel):
@@ -241,7 +242,23 @@ class ItemPeza(tk.Frame):
 		frmEditPeza.mainloop()
 
 	def delete(self):
-		pass
+		#Pedir confirmacion
+		respuesta = tkMsgBox.askyesno(
+			"Eliminar",
+			message="Seguro que queres eliminar a peza " + self.peza.getLabel() + "?",
+			default="no")
+
+		if respuesta:
+			#Enviar peticion
+			result = funs.deletePeza(self.peza)
+
+			#Mostrar resultado
+			if result == 201:
+				tkMsgBox.showinfo("OK", message="Peza eliminada")
+				self.destroy()
+			else:
+				print("Error " + str(result) + " actualizando datos ")
+				tkMsgBox.showerror("ERROR " + str(result), message="Erro gardando os datos")
 
 class Xpezas(tk.Toplevel):
 	def __init__(self, master=None, resPath=".."):
@@ -254,15 +271,8 @@ class Xpezas(tk.Toplevel):
 		barraIconos = tk.Frame(self)
 		barraIconos.pack(side=tk.TOP, fill=tk.X)
 
-		imgRefresh = ImageTk.PhotoImage(
-			Image.open(os.path.join(resPath, "refresh-icon.png")).resize((60, 60), Image.ANTIALIAS)
-		)
 		tk.Button(barraIconos, text="Actualizar", command=self.refresh).pack(side=tk.LEFT)
-
-		imgAdd = ImageTk.PhotoImage(
-			Image.open(os.path.join(resPath, "refresh-icon.png")).resize((60, 60), Image.ANTIALIAS)
-		)
-		tk.Button(barraIconos, text="Nuevo", command=self.add).pack(side=tk.LEFT)
+		tk.Button(barraIconos, text="Novo", command=self.add).pack(side=tk.LEFT)
 		#endregion
 
 		#region Lista
@@ -286,88 +296,59 @@ class Xpezas(tk.Toplevel):
 			item.pack(expand=True, side=tk.TOP, fill=tk.X)
 		
 	def add(self):
-		pass
+		frmNewPeza = FrmEditPeza(objetos.Peza(), master=self, newpeza=True)
+		frmNewPeza.mainloop()
 
 class FrmEditPeza(tk.Toplevel):
-	def __init__(self, peza, master=None, readonly=False):
+	def __init__(self, peza, master=None, readonly=False, newpeza=False):
 		tk.Toplevel.__init__(self, master)
 		self.master = master
 		self.peza = peza
+		self.newpeza = newpeza
 		self.title("Datos " + str(self.peza.nome))
 
 		self.campos = {}
 
-		#Variables de los datos
-		self.codigo = tk.StringVar()
-		self.codigo.set(self.peza.codigo)
-		self.prov = tk.StringVar()
-		self.prov.set(self.peza.prov)
-		self.nome = tk.StringVar()
-		self.nome.set(self.peza.nome)
-		#¿foto?
-		self.precio = tk.StringVar()
-		self.precio.set(str(self.peza.precio))
-		self.cantidade = tk.StringVar()
-		self.cantidade.set(self.peza.cantidade)
-		#self.notas
-	
-		lblId = tk.Label(master=self, text="ID: ")
-		lblId.grid(column=0, row=0)
-		lblIdTxt = tk.Label(master=self, text=str(self.peza.id))
-		lblIdTxt.grid(column=1, row=0)
-		self.campos["id"] = lblIdTxt
+		if not newpeza:
+			lblId = tk.Label(master=self, text="ID: ")
+			lblId.grid(column=0, row=0)
+			lblIdTxt = tk.Label(master=self, text=str(self.peza.id))
+			lblIdTxt.grid(column=1, row=0)
+			self.campos["id"] = lblIdTxt
 
-		lblCodigo = tk.Label(master=self, text="Codigo: ")
-		lblCodigo.grid(column=0, row=1)
-		txtCodigo = tk.Entry(master=self, textvariable=self.nome)
-		txtCodigo.grid(column=1, row=1)
-		self.campos["codigo"] = txtCodigo
+		tk.Label(master=self, text="Codigo: ").grid(column=0, row=1)
+		self.campos["codigo"] = tk.Entry(master=self, text=self.peza.codigo)
+		self.campos["codigo"].grid(column=1, row=1)
 
-		lblProv = tk.Label(master=self, text="Proveedor: ")
-		lblProv.grid(column=0, row=2)
-		txtProv = tk.Entry(master=self, textvariable=self.prov)
-		txtProv.grid(column=1, row=2)
-		self.campos["prov"] = txtProv
+		tk.Label(master=self, text="Prov: ").grid(column=0, row=2)
+		self.campos["prov"] = tk.Entry(master=self, text=self.peza.prov)
+		self.campos["prov"].grid(column=1, row=2)
 
-		lblNome = tk.Label(master=self, text="Nome: ")
-		lblNome.grid(column=0, row=3)
-		txtNome = tk.Entry(master=self, textvariable=self.nome)
-		txtNome.grid(column=1, row=3)
-		self.campos["nome"] = txtNome
+		tk.Label(master=self, text="Nome: ").grid(column=0, row=3)
+		self.campos["nome"] = tk.Entry(master=self, text=self.peza.nome)
+		self.campos["nome"].grid(column=1, row=3)
 
-		lblFoto = tk.Label(master=self, text="Foto: ")
-		lblFoto.grid(column=0, row=4)
-		#TODO: Poner la foto
-		imgFoto = tk.Entry(master=self)
-		imgFoto.grid(column=1, row=4)
-		self.campos["foto"] = imgFoto
+		#Foto
 
-		lblPrecio = tk.Label(master=self, text="Precio: ")
-		lblPrecio.grid(column=0, row=5)
-		txtPrecio = tk.Entry(master=self, textvariable=self.precio)
-		txtPrecio.grid(column=1, row=5)
-		self.campos["precio"] = txtPrecio
+		tk.Label(master=self, text="Precio: ").grid(column=0, row=5)
+		self.campos["precio"] = tk.Entry(master=self, text=str(self.peza.precio))
+		self.campos["precio"].grid(column=1, row=5)
 
-		lblCant = tk.Label(master=self, text="Cantidade: ")
-		lblCant.grid(column=0, row=6)
-		txtCant = tk.Entry(master=self, textvariable=self.cantidade)
-		txtCant.grid(column=1, row=6)
-		self.campos["catidade"] = txtCant
+		tk.Label(master=self, text="Cantidade: ").grid(column=0, row=6)
+		self.campos["cantidade"] = tk.Entry(master=self, text=self.peza.cantidade)
+		self.campos["cantidade"].grid(column=1, row=6)
 
-		lblNotas = tk.Label(master=self, text="Notas: ")
-		lblNotas.grid(column=0, row=7)
-		txtNotas = tk.Text(master=self)
-		txtNotas.grid(column=1, row=7)
-		#Insertar la nota real
-		txtNotas.insert(tk.INSERT, self.peza.notas)
-		self.campos["notas"] = txtNotas
+		tk.Label(master=self, text="Notas: ").grid(column=0, row=7)
+		self.campos["notas"] = tk.Entry(master=self, text=self.peza.notas)
+		self.campos["notas"].grid(column=1, row=7)
 
 		if readonly:
 			btnClose = tk.Button(master=self, text="Pechar", command=self.cancel)
 			btnClose.grid(column=1, row=8)
 
 			for k, v in self.campos.items():
-				v.config(state=tk.DISABLED, fg="black")
+				v.config(state=tk.DISABLED, fg="white")
+
 		else:
 			btnCancel = tk.Button(master=self, text="Cancelar", command=self.cancel)
 			btnCancel.grid(column=0, row=8)
@@ -379,23 +360,35 @@ class FrmEditPeza(tk.Toplevel):
 		self.destroy()
 
 	def save(self):
-		pass
-	
-		# self.peza.nome = self.nome.get()
-		# self.peza.tlf = self.tlf.get()
-		# self.peza.email = self.email.get()
-		# self.peza.notas = self.campos["notas"].get('1.0', tk.END)
+		#Validar datos
+		try:
+			pass
+		except:
+			pass
 
-		# try:
-		# 	result = funs.updateCliente(self.cliente)
+		#Asignar al Obj
+		self.peza.codigo = self.campos["codigo"].get()
+		self.peza.prov = self.campos["prov"].get()
+		self.peza.nome = self.campos["nome"].get()
+		#Foto
+		self.peza.precio = dc.Decimal(self.campos["precio"].get())
+		self.peza.cantidade = int(self.campos["cantidade"].get())
+		self.peza.notas = self.campos["notas"].get()
 
-		# 	if result == 201:
-		# 		tkMsgBox.showinfo("OK", message="Datos actualizados")
-		# 		self.destroy()
-		# 	else:
-		# 		print("Error " + str(result) + " actualizando datos ")
-		# 		tkMsgBox.showerror("ERROR " + str(result), message="Error al guardar los datos")
-		# except:
-		# 	print("Error actualizando datos (2)")
-		# 	tkMsgBox.showerror("ERROR", message="Error al guardar los datos")
+		try:
+			if self.newpeza:
+				result = funs.addPeza(self.peza)
+			else:
+				result = funs.updatePeza(self.peza)
+
+			if result == 201:
+				tkMsgBox.showinfo("OK", message="Datos actualizados")
+				self.destroy()
+			else:
+				print("Error " + str(result) + " actualizando datos ")
+				tkMsgBox.showerror("ERROR " + str(result), message="Erro gardando datos")
+		except:
+			print("Error actualizando datos (2)")
+			tkMsgBox.showerror("ERROR", message="Erro gardando datos")
+		self.master.refresh()
 #endregion

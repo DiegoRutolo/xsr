@@ -4,10 +4,73 @@ import os
 import tkinter as tk
 import json
 import requests
+import traceback
 import decimal as dc
 from . import objetos
 
 CON_STR = "http://localhost:10097"
+
+#region Comunes
+def validarNum(num):
+	return num.isdigit()
+
+def validarInt(num):
+	return type(num) == int
+
+def getReqObj_Get(apartado, rol="xerente"):
+	return {
+		"usuario": {
+			"rol": rol
+		},
+		"operacion": {
+			"apartado": apartado,
+			"tipo": "get"
+		}
+	}
+
+def getReqObj_Create(apartado, nome_obx, obx, rol="xerente"):
+	return {
+		"usuario": {
+			"rol": rol
+		},
+		"operacion": {
+			"apartado": apartado,
+			"tipo": "create",
+			"datos": {
+				nome_obx: obx.getDic()
+			}
+		}
+	}
+
+def getReqObj_Update(apartado, obx, rol="xerente"):
+	return {
+		"usuario": {
+			"rol": rol
+		},
+		"operacion": {
+			"apartado": apartado,
+			"tipo": "update",
+			"selec": {
+				"id": obx.id
+			},
+			"datos": obx.getDic()
+		}
+	}
+
+def getReqObj_Delete(apartado, id, rol="xerente"):
+	return {
+		"usuario": {
+			"rol": rol
+		},
+		"operacion": {
+			"apartado": apartado,
+			"tipo": "delete",
+			"selec": {
+				"id": id
+			}
+		}
+	}
+#endregion
 
 #region Clientes
 def listClientesInventados():
@@ -21,65 +84,11 @@ def listClientesInventados():
 
 	return listaClientes
 
-def getReqObj_Get(apartado="x_clientes", rol="xerente"):
-	return {
-		"usuario": {
-			"rol": rol
-		},
-		"operacion": {
-			"apartado": apartado,
-			"tipo": "get"
-		}
-	}
-
-def getReqObj_AddCliente(cliente, rol="xerente"):
-	return {
-		"usuario": {
-			"rol": rol
-		},
-		"operacion": {
-			"apartado": "x_clientes",
-			"tipo": "create",
-			"datos": {
-				"cliente": cliente.getDic()
-			}
-		}
-	}
-
-def getReqObj_UpdateCliente(cliente, rol="xerente"):
-	return {
-		"usuario": {
-			"rol": rol
-		},
-		"operacion": {
-			"apartado": "x_clientes",
-			"tipo": "update",
-			"selec": {
-				"id": cliente.id
-			},
-			"datos": cliente.getDic()
-		}
-	}
-
-def getReqObj_DelCliente(cliente, rol="xerente"):
-	return {
-		"usuario": {
-			"rol": rol
-		},
-		"operacion": {
-			"apartado": "x_clientes",
-			"tipo": "delete",
-			"selec": {
-				"id": cliente.id
-			}
-		}
-	}
-
 def listClientes():
 	listaClientes = []
 
 	try:
-		r = requests.post(CON_STR, json=getReqObj_Get())
+		r = requests.post(CON_STR, json=getReqObj_Get(apartado="x_clientes"))
 		datos = json.loads(r.text)
 		for c in datos["data"]:
 			listaClientes.append(objetos.Cliente(
@@ -90,16 +99,16 @@ def listClientes():
 	
 	return listaClientes
 
-def updateCliente(cliente):
-	r = requests.post(CON_STR, json=getReqObj_UpdateCliente(cliente))
+def addCliente(cliente):
+	r = requests.post(CON_STR, json=getReqObj_Create("x_clientes", "cliente", cliente))
 	return r.status_code
 
-def addCliente(cliente):
-	r = requests.post(CON_STR, json=getReqObj_AddCliente(cliente))
+def updateCliente(cliente):
+	r = requests.post(CON_STR, json=getReqObj_Update("x_clientes", cliente))
 	return r.status_code
 
 def deleteCliete(cliente):
-	r = requests.post(CON_STR, json=getReqObj_DelCliente(cliente))
+	r = requests.post(CON_STR, json=getReqObj_Delete("x_clientes", cliente.id))
 	return r.status_code
 #endregion
 
@@ -120,6 +129,32 @@ def listPezasInvent():
 
 	return lista
 
-def  listPezas():
-	return listPezasInvent()
+def listPezas():
+	listaPezas = []
+
+	try:
+		r = requests.post(CON_STR, json=getReqObj_Get(apartado="x_pezas"))
+		datos = json.loads(r.text)
+		for c in datos["data"]:
+			listaPezas.append(objetos.Peza(
+				c["id"], c["codigo"], c["prov"], c["nome"], c["foto"],
+				dc.Decimal(c["precio"]), int(c["cantidade"]), c["notas"]
+			))
+	except:
+		print(traceback.format_exc())
+		print("Error procesando datos")
+	
+	return listaPezas
+
+def addPeza(peza):
+	r = requests.post(CON_STR, json=getReqObj_Create("x_pezas", "peza", peza))
+	return r.status_code
+
+def updatePeza(peza):
+	r = requests.post(CON_STR, json=getReqObj_Update("x_pezas", peza))
+	return r.status_code
+
+def deletePeza(peza):
+	r = requests.post(CON_STR, json=getReqObj_Delete("x_pezas", peza.id))
+	return r.status_code
 #endregion
