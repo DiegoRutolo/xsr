@@ -9,6 +9,7 @@ from . import objetos
 
 CON_STR = "http://localhost:10097"
 
+#region Clientes
 def listClientesInventados():
 	listaClientes = []
 
@@ -60,6 +61,20 @@ def getReqObj_UpdateCliente(cliente, rol="xerente"):
 		}
 	}
 
+def getReqObj_DelCliente(cliente, rol="xerente"):
+	return {
+		"usuario": {
+			"rol": rol
+		},
+		"operacion": {
+			"apartado": "x_clientes",
+			"tipo": "delete",
+			"selec": {
+				"id": cliente.id
+			}
+		}
+	}
+
 def listClientes():
 	listaClientes = []
 
@@ -83,6 +98,12 @@ def addCliente(cliente):
 	r = requests.post(CON_STR, json=getReqObj_AddCliente(cliente))
 	return r.status_code
 
+def deleteCliete(cliente):
+	r = requests.post(CON_STR, json=getReqObj_DelCliente(cliente))
+	return r.status_code
+#endregion
+
+#region Pezas
 def listPezasInvent():
 	lista = []
 
@@ -101,3 +122,4 @@ def listPezasInvent():
 
 def  listPezas():
 	return listPezasInvent()
+#endregion

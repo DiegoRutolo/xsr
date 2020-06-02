@@ -46,7 +46,23 @@ class ItemCliente(tk.Frame):
 		frmEditCliente.mainloop()
 
 	def delete(self):
-		pass
+		#Pedir confirmacion
+		respuesta = tkMsgBox.askyesno(
+			"Eliminar",
+			message="Seguro que queres eliminar a " + self.cliente.getLabel() + "?",
+			default="no")
+
+		if respuesta:
+			#Enviar peticion
+			result = funs.deleteCliete(self.cliente)
+
+			#Mostrar resultado
+			if result == 201:
+				tkMsgBox.showinfo("OK", message="Cliente eliminado")
+				self.destroy()
+			else:
+				print("Error " + str(result) + " actualizando datos ")
+				tkMsgBox.showerror("ERROR " + str(result), message="Error al guardar los datos")
 
 class Xclientes(tk.Toplevel):
 	def __init__(self, master=None, resPath=".."):
