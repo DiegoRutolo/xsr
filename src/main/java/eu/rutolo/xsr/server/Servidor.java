@@ -64,6 +64,7 @@ public class Servidor extends Thread {
 		}
 
 		Peticion p = new Peticion(dataString);
+		Log.d(dataString);
 
 		// Comprueba tipo
 		switch (p.getTipo()) {
@@ -232,6 +233,8 @@ public class Servidor extends Thread {
 			}
 		} catch (JSONException e) {
 			peticionError(p);
+			e.printStackTrace();
+			return;
 		}
 
 		enviarRespuesta(respuesta);
