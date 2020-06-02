@@ -4,10 +4,12 @@ import os
 import tkinter as tk
 import json
 import requests
+import decimal as dc
 from . import objetos
 
 CON_STR = "http://localhost:10097"
 
+#region Clientes
 def listClientesInventados():
 	listaClientes = []
 
@@ -30,6 +32,20 @@ def getReqObj_Get(apartado="x_clientes", rol="xerente"):
 		}
 	}
 
+def getReqObj_AddCliente(cliente, rol="xerente"):
+	return {
+		"usuario": {
+			"rol": rol
+		},
+		"operacion": {
+			"apartado": "x_clientes",
+			"tipo": "create",
+			"datos": {
+				"cliente": cliente.getDic()
+			}
+		}
+	}
+
 def getReqObj_UpdateCliente(cliente, rol="xerente"):
 	return {
 		"usuario": {
@@ -42,6 +58,20 @@ def getReqObj_UpdateCliente(cliente, rol="xerente"):
 				"id": cliente.id
 			},
 			"datos": cliente.getDic()
+		}
+	}
+
+def getReqObj_DelCliente(cliente, rol="xerente"):
+	return {
+		"usuario": {
+			"rol": rol
+		},
+		"operacion": {
+			"apartado": "x_clientes",
+			"tipo": "delete",
+			"selec": {
+				"id": cliente.id
+			}
 		}
 	}
 
@@ -63,3 +93,33 @@ def listClientes():
 def updateCliente(cliente):
 	r = requests.post(CON_STR, json=getReqObj_UpdateCliente(cliente))
 	return r.status_code
+
+def addCliente(cliente):
+	r = requests.post(CON_STR, json=getReqObj_AddCliente(cliente))
+	return r.status_code
+
+def deleteCliete(cliente):
+	r = requests.post(CON_STR, json=getReqObj_DelCliente(cliente))
+	return r.status_code
+#endregion
+
+#region Pezas
+def listPezasInvent():
+	lista = []
+
+	lista.append(objetos.Peza(
+		id="23432", codigo="REW-3", prov="Misko", nome="Paleta",
+		precio=dc.Decimal("69"), cantidade=45
+	))
+
+	lista.append(objetos.Peza(
+		id="208", codigo="pp51b-plb", prov="Plumbubo Prime 51b",
+		nome="Plumbus", precio=dc.Decimal("6.5"), cantidade=21,
+		notas="No necesita descripción, todo el mundo sabe lo que hace"
+	))
+
+	return lista
+
+def  listPezas():
+	return listPezasInvent()
+#endregion
