@@ -108,7 +108,7 @@ class Xclientes(tk.Toplevel):
 			item.pack(expand=True, side=tk.TOP, fill=tk.X)
 		
 	def add(self):
-		frmNewCliente = FrmEditCliente(objetos.Cliente(), master=self, newpeza=True)
+		frmNewCliente = FrmEditCliente(objetos.Cliente(), master=self, newclient=True)
 		frmNewCliente.mainloop()
 
 class FrmEditCliente(tk.Toplevel):
@@ -317,29 +317,35 @@ class FrmEditPeza(tk.Toplevel):
 			self.campos["id"] = lblIdTxt
 
 		tk.Label(master=self, text="Codigo: ").grid(column=0, row=1)
-		self.campos["codigo"] = tk.Entry(master=self, text=self.peza.codigo)
+		self.campos["codigo"] = tk.Entry(master=self)
+		self.campos["codigo"].insert(tk.INSERT, self.peza.codigo)
 		self.campos["codigo"].grid(column=1, row=1)
 
 		tk.Label(master=self, text="Prov: ").grid(column=0, row=2)
-		self.campos["prov"] = tk.Entry(master=self, text=self.peza.prov)
+		self.campos["prov"] = tk.Entry(master=self)
+		self.campos["prov"].insert(tk.INSERT, self.peza.prov)
 		self.campos["prov"].grid(column=1, row=2)
 
 		tk.Label(master=self, text="Nome: ").grid(column=0, row=3)
-		self.campos["nome"] = tk.Entry(master=self, text=self.peza.nome)
+		self.campos["nome"] = tk.Entry(master=self)
+		self.campos["nome"].insert(tk.INSERT, self.peza.nome)
 		self.campos["nome"].grid(column=1, row=3)
 
 		#Foto
 
 		tk.Label(master=self, text="Precio: ").grid(column=0, row=5)
-		self.campos["precio"] = tk.Entry(master=self, text=str(self.peza.precio))
+		self.campos["precio"] = tk.Entry(master=self)
+		self.campos["precio"].insert(tk.INSERT, str(self.peza.precio))
 		self.campos["precio"].grid(column=1, row=5)
 
 		tk.Label(master=self, text="Cantidade: ").grid(column=0, row=6)
-		self.campos["cantidade"] = tk.Entry(master=self, text=self.peza.cantidade)
+		self.campos["cantidade"] = tk.Entry(master=self)
+		self.campos["cantidade"].insert(tk.INSERT, str(self.peza.cantidade))
 		self.campos["cantidade"].grid(column=1, row=6)
 
 		tk.Label(master=self, text="Notas: ").grid(column=0, row=7)
-		self.campos["notas"] = tk.Entry(master=self, text=self.peza.notas)
+		self.campos["notas"] = tk.Text(master=self)
+		self.campos["notas"].insert(tk.INSERT, self.peza.notas)
 		self.campos["notas"].grid(column=1, row=7)
 
 		if readonly:
@@ -373,7 +379,7 @@ class FrmEditPeza(tk.Toplevel):
 		#Foto
 		self.peza.precio = dc.Decimal(self.campos["precio"].get())
 		self.peza.cantidade = int(self.campos["cantidade"].get())
-		self.peza.notas = self.campos["notas"].get()
+		self.peza.notas = self.campos["notas"].get('1.0', tk.END)
 
 		try:
 			if self.newpeza:

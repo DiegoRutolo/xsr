@@ -24,7 +24,7 @@ img = ImageTk.PhotoImage(
 		Image.open(os.path.join(resPath, "customer.png")).resize((80, 80), Image.ANTIALIAS)
 	)
 
-tk.Button(root, text="Xestión clientes", image=img, command=abrirXclientes).pack()
+tk.Button(root, text="Xestión clientes", command=abrirXclientes).pack()
 tk.Button(root, text="Xestión pezas", command=abrirXpezas).pack()
 
 tk.mainloop()
