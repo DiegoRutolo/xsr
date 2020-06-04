@@ -366,11 +366,25 @@ class FrmEditPeza(tk.Toplevel):
 		self.destroy()
 
 	def save(self):
+		#Cambiar coma por punto
+		tmp = self.campos["precio"].get()
+		self.campos["precio"].delete(0, tk.END)
+		self.campos["precio"].insert(tk.INSERT, tmp.replace(",", "."))
+
 		#Validar datos
 		try:
-			pass
+			i = dc.Decimal(self.campos["precio"].get())
+			i += 1	
+		except:	
+			tkMsgBox.showerror("ERROR", message="O precio debe ser un número")
+			return
+
+		try:
+			i = int(self.campos["cantidade"].get())
 		except:
-			pass
+			tkMsgBox.showerror("ERROR", message="A cantidade debe ser un número enteiro")
+			return
+
 
 		#Asignar al Obj
 		self.peza.codigo = self.campos["codigo"].get()
