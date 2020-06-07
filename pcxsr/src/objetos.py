@@ -3,6 +3,7 @@
 import os
 import tkinter as tk
 import decimal as dc
+from . import funs as f
 
 class Cliente():
 	def __init__(self, id=0, nome="", tlf="", email="", notas=""):
@@ -41,4 +42,27 @@ class Peza():
 			"nome": self.nome, "foto": self.foto,
 			"precio": str(self.precio), "cantidade": self.cantidade,
 			"notas": self.notas
+		}
+
+class Pedido():
+	def __init__(self, client_id=0, peza_id=0, pvp=dc.Decimal(0), estado=""):
+		self.client_id = client_id
+		self.peza_id = peza_id
+		self.pvp = pvp
+		self.estado = estado
+	
+	def getLabel(self):
+		label = ""
+		try:
+			label = str(f.getCliente(self.client_id).getLabel() + " - " + f.getPeza(self.peza_id).getLabel())
+		except:
+			label = str(self.client_id) + ", " + str(self.peza_id)
+
+		print("Label es " + label)
+		return label
+	
+	def getDic(self):
+		return {
+			"idCliente": self.client_id, "idPeza": self.peza_id,
+			"pvp": str(self.pvp), "estado": self.estado
 		}

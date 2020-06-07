@@ -16,14 +16,20 @@ def abrirXclientes():
 	xc = componentes.Xclientes(root, resPath)
 	xc.mainloop()
 
-def abridXpezas():
+def abrirXpezas():
 	xp = componentes.Xpezas(root, resPath)
+	xp.mainloop()
+
+def abrirXpedidos():
+	xp = componentes.Xpedidos(root, resPath)
 	xp.mainloop()
 
 img = ImageTk.PhotoImage(
 		Image.open(os.path.join(resPath, "customer.png")).resize((80, 80), Image.ANTIALIAS)
 	)
 
-tk.Button(root, text="Xestión clientes", image=img, command=abrirXclientes).pack()
+tk.Button(root, text="Xestión clientes", command=abrirXclientes).pack()
+tk.Button(root, text="Xestión pezas", command=abrirXpezas).pack()
+tk.Button(root, text="Xestión pedidos", command=abrirXpedidos).pack()
 
 tk.mainloop()
