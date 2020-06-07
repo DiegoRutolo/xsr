@@ -99,7 +99,7 @@ O desenvolvemento destes scripts relízanse na branch *test-client* e pódese at
 
 ## Guía de contribución
 
-O mellor para contribui ó proxecto é a creación de clientes, pero engadir ou correxir no servidor tamén se agradece.
+O mellor para contribuir ó proxecto é a creación de clientes, pero engadir ou correxir no servidor tamén se agradece.
 
 ### No servidor
  * Manter o nome e tipo dos campos de cada clase seguindo os definidos no [script SQL](config/xsrdb.sql)
@@ -107,9 +107,4 @@ O mellor para contribui ó proxecto é a creación de clientes, pero engadir ou 
  * **Pull requests**: Indicar sembre os cambios realizados e o motivo.
 
 ### Nos clientes
-
 Para escribir un cliente novo débese utilizar un novo repositorio. Para os contidos neste repositorio débense seguir as normas indicadas arriba.
-
-## Links
-
-> *TODO*: Enlaces externos y descipciones de estos enlaces que creas conveniente indicar aquí. Generalmente ya van a estar integrados con tu documentación, pero si requieres realizar un listado de ellos, este es el lugar.
