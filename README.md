@@ -99,8 +99,21 @@ O desenvolvemento destes scripts relízanse na branch *test-client* e pódese at
 
 ## Guía de contribución
 
+<<<<<<< Updated upstream
 > *TODO*: Tratándose de un proyecto de software libre, es muy importante que expongas cómo se puede contribuir con tu proyecto. Algunos ejemplos de esto son realizar nuevas funcionalidades, corrección y/u optimización del código, realización de tests automatizados, nuevas interfaces de integración, desarrollo de plugins, etc. etc. Sé lo más conciso que puedas.
 
 ## Links
 
 > *TODO*: Enlaces externos y descipciones de estos enlaces que creas conveniente indicar aquí. Generalmente ya van a estar integrados con tu documentación, pero si requieres realizar un listado de ellos, este es el lugar.
+=======
+O mellor para contribui ó proxecto é a creación de clientes, pero engadir ou correxir no servidor tamén se agradece.
+
+### No servidor
+ * Manter o nome e tipo dos campos de cada clase seguindo os definidos no [script SQL](config/xsrdb.sql)
+    * Ex: O número de teléfono de **Cliente**, utilizar sembre `tlf`, non *telf* ou *telef*.
+ * **Pull requests**: Indicar sembre os cambios realizados e o motivo.
+
+### Nos clientes
+
+Para escribir un cliente novo débese utilizar un novo repositorio. Para os contidos neste repositorio débense seguir as normas indicadas arriba.
+>>>>>>> Stashed changes
